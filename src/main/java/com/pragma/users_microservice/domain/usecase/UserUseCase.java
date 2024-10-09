@@ -3,10 +3,7 @@ package com.pragma.users_microservice.domain.usecase;
 import com.pragma.users_microservice.domain.api.IUserServicePort;
 import com.pragma.users_microservice.domain.constants.ExceptionConstants;
 import com.pragma.users_microservice.domain.constants.UseCaseConstants;
-import com.pragma.users_microservice.domain.exception.InvalidEmailStructureException;
-import com.pragma.users_microservice.domain.exception.InvalidIdentityDocumentException;
-import com.pragma.users_microservice.domain.exception.InvalidPhoneNumberException;
-import com.pragma.users_microservice.domain.exception.UnderageUserException;
+import com.pragma.users_microservice.domain.exception.*;
 import com.pragma.users_microservice.domain.model.User;
 import com.pragma.users_microservice.domain.spi.IUserPersistencePort;
 
@@ -37,6 +34,9 @@ public class UserUseCase implements IUserServicePort {
         }
         if (user.getBirthdate().isAfter(LocalDate.now().minusYears(UseCaseConstants.LEGAL_AGE))) {
             throw new UnderageUserException(ExceptionConstants.UNDERAGE_USER_MESSAGE);
+        }
+        if (userPersistencePort.alreadyExistsByIdentityDocument(user.getIdentityDocument())) {
+            throw new AlreadyExistsByIdentityDocumentException(ExceptionConstants.ALREADY_EXISTS_BY_IDENTITY_DOCUMENT_MESSAGE);
         }
     }
 }

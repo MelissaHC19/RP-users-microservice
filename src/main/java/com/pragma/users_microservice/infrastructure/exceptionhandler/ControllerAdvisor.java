@@ -1,9 +1,6 @@
 package com.pragma.users_microservice.infrastructure.exceptionhandler;
 
-import com.pragma.users_microservice.domain.exception.InvalidEmailStructureException;
-import com.pragma.users_microservice.domain.exception.InvalidIdentityDocumentException;
-import com.pragma.users_microservice.domain.exception.InvalidPhoneNumberException;
-import com.pragma.users_microservice.domain.exception.UnderageUserException;
+import com.pragma.users_microservice.domain.exception.*;
 import com.pragma.users_microservice.infrastructure.constants.ControllerConstants;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +37,12 @@ public class ControllerAdvisor {
     public ResponseEntity<ExceptionResponse> handleUnderageUserException(UnderageUserException exception) {
         ExceptionResponse response = new ExceptionResponse(exception.getMessage(), HttpStatus.BAD_REQUEST.toString(), LocalDateTime.now());
         return ResponseEntity.badRequest().body(response);
+    }
+
+    @ExceptionHandler(AlreadyExistsByIdentityDocumentException.class)
+    public ResponseEntity<ExceptionResponse> handleAlreadyExistsByIdentityDocumentException(AlreadyExistsByIdentityDocumentException exception) {
+        ExceptionResponse response = new ExceptionResponse(exception.getMessage(), HttpStatus.CONFLICT.toString(), LocalDateTime.now());
+        return ResponseEntity.status(409).body(response);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

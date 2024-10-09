@@ -15,4 +15,9 @@ public class UserJpaAdapter implements IUserPersistencePort {
     public void createUser(User user) {
         userRepository.save(userEntityMapper.userToEntity(user));
     }
+
+    @Override
+    public boolean alreadyExistsByIdentityDocument(String identityDocument) {
+        return userRepository.findByIdentityDocument(identityDocument).isPresent();
+    }
 }
