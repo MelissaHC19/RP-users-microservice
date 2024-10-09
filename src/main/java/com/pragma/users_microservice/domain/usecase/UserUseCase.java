@@ -18,6 +18,7 @@ public class UserUseCase implements IUserServicePort {
 
     @Override
     public void createUser(User user) {
+        validateMandatoryFields(user);
         validateUser(user);
         userPersistencePort.createUser(user);
     }
@@ -37,6 +38,33 @@ public class UserUseCase implements IUserServicePort {
         }
         if (userPersistencePort.alreadyExistsByIdentityDocument(user.getIdentityDocument())) {
             throw new AlreadyExistsByIdentityDocumentException(ExceptionConstants.ALREADY_EXISTS_BY_IDENTITY_DOCUMENT_MESSAGE);
+        }
+    }
+
+    private void validateMandatoryFields(User user) {
+        if (user.getName().trim().isEmpty()) {
+            throw new EmptyOrNullFieldsException(ExceptionConstants.NAME_MANDATORY_MESSAGE);
+        }
+        if (user.getLastName().trim().isEmpty()) {
+            throw new EmptyOrNullFieldsException(ExceptionConstants.LAST_NAME_MANDATORY_MESSAGE);
+        }
+        if (user.getIdentityDocument().trim().isEmpty()) {
+            throw new EmptyOrNullFieldsException(ExceptionConstants.IDENTITY_DOCUMENT_MANDATORY_MESSAGE);
+        }
+        if (user.getPhoneNumber().trim().isEmpty()) {
+            throw new EmptyOrNullFieldsException(ExceptionConstants.PHONE_NUMBER_MANDATORY_MESSAGE);
+        }
+        if (user.getBirthdate() == null) {
+            throw new EmptyOrNullFieldsException(ExceptionConstants.BIRTHDATE_MANDATORY_MESSAGE);
+        }
+        if (user.getEmail().trim().isEmpty()) {
+            throw new EmptyOrNullFieldsException(ExceptionConstants.EMAIL_MANDATORY_MESSAGE);
+        }
+        if (user.getPassword().trim().isEmpty()) {
+            throw new EmptyOrNullFieldsException(ExceptionConstants.PASSWORD_MANDATORY_MESSAGE);
+        }
+        if (user.getRole() == null) {
+            throw new EmptyOrNullFieldsException(ExceptionConstants.ROLE_MANDATORY_MESSAGE);
         }
     }
 }
