@@ -44,6 +44,18 @@ public class UserRestControllerAdapter {
         return ResponseEntity.status(HttpStatus.CREATED).body(new ControllerResponse(ControllerConstants.USER_CREATED_MESSAGE, HttpStatus.CREATED.toString(), LocalDateTime.now()));
     }
 
+    @Operation(summary = DocumentationConstants.GET_USER_SUMMARY,
+            tags = {DocumentationConstants.USER_TAG},
+            description = DocumentationConstants.GET_USER_DESCRIPTION
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = DocumentationConstants.OK_STATUS_CODE,
+                    description = DocumentationConstants.OK_RESPONSE_CODE_DESCRIPTION,
+                    content = @Content),
+            @ApiResponse(responseCode = DocumentationConstants.NOT_FOUND_STATUS_CODE,
+                    description = DocumentationConstants.NOT_FOUND_RESPONSE_CODE_DESCRIPTION,
+                    content = @Content),
+    })
     @GetMapping("/{id}")
     public ResponseEntity<GetUserResponse> getUserById(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(userHandler.getUserById(id));
