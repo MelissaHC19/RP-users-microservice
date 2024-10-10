@@ -194,7 +194,7 @@ class UserUseCaseTest {
     }
 
     @Test
-    @DisplayName("Inserts an owner in the DB")
+    @DisplayName("Validation exception when user already exists by identity document in the DB")
     void createUserShouldThrowValidationExceptionWhenUserAlreadyExists() {
         User user = new User(1L, "Melissa", "Henao", "1004738846",
                 "573205898802", LocalDate.parse("2001-05-19"), "melissahenao19@gmail.com",

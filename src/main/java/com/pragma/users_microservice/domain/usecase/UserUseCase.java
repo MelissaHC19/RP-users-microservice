@@ -23,6 +23,11 @@ public class UserUseCase implements IUserServicePort {
         userPersistencePort.createUser(user);
     }
 
+    @Override
+    public User getUserById(Long id) {
+        return userPersistencePort.getUserById(id);
+    }
+
     private void validateUser(User user) {
         if (!user.getEmail().matches(UseCaseConstants.EMAIL_REGULAR_EXPRESSION)) {
             throw new InvalidEmailStructureException(ExceptionConstants.INVALID_EMAIL_STRUCTURE_MESSAGE);

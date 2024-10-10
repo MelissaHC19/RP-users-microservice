@@ -1,6 +1,8 @@
 package com.pragma.users_microservice.application.handler;
 
 import com.pragma.users_microservice.application.dto.request.RegisterUserRequest;
+import com.pragma.users_microservice.application.dto.response.GetUserResponse;
+import com.pragma.users_microservice.application.mapper.IGetUserResponseMapper;
 import com.pragma.users_microservice.application.mapper.IRegisterUserRequestMapper;
 import com.pragma.users_microservice.domain.api.IUserServicePort;
 import com.pragma.users_microservice.domain.model.User;
@@ -16,6 +18,7 @@ public class UserHandler implements IUserHandler {
     private final IUserServicePort userServicePort;
     private final IRegisterUserRequestMapper registerUserRequestMapper;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final IGetUserResponseMapper getUserResponseMapper;
 
 
     @Override
@@ -23,5 +26,11 @@ public class UserHandler implements IUserHandler {
         User user = registerUserRequestMapper.requestToUser(registerUserRequest);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userServicePort.createUser(user);
+    }
+
+    @Override
+    public GetUserResponse getUserById(Long id) {
+        User user = userServicePort.getUserById(id);
+        return getUserResponseMapper.userToResponse(user);
     }
 }
