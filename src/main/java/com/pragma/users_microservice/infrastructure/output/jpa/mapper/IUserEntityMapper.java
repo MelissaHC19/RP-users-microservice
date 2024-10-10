@@ -9,4 +9,7 @@ import org.mapstruct.Mapping;
 public interface IUserEntityMapper {
     @Mapping(source = "role", target = "roleID")
     UserEntity userToEntity(User user);
+
+    @Mapping(source = "roleID", target = "role")
+    User entityToUser(UserEntity userEntity);
 }
