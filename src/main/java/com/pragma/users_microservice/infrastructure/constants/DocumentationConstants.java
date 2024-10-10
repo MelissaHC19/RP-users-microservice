@@ -1,6 +1,5 @@
 package com.pragma.users_microservice.infrastructure.constants;
 
-import javax.swing.plaf.PanelUI;
 
 public class DocumentationConstants {
     private DocumentationConstants() {
