@@ -2,8 +2,7 @@ package com.pragma.users_microservice.infrastructure.output.jpa.adapter;
 
 import com.pragma.users_microservice.domain.model.Role;
 import com.pragma.users_microservice.domain.model.User;
-import com.pragma.users_microservice.infrastructure.constants.ExceptionConstants;
-import com.pragma.users_microservice.infrastructure.exception.UserNotFoundException;
+import com.pragma.users_microservice.domain.exception.UserNotFoundException;
 import com.pragma.users_microservice.infrastructure.output.jpa.entity.RoleEntity;
 import com.pragma.users_microservice.infrastructure.output.jpa.entity.UserEntity;
 import com.pragma.users_microservice.infrastructure.output.jpa.mapper.IUserEntityMapper;

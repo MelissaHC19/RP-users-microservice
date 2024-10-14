@@ -57,8 +57,8 @@ public class UserRestControllerAdapter {
                     description = DocumentationConstants.NOT_FOUND_RESPONSE_CODE_DESCRIPTION,
                     content = @Content),
     })
-    @GetMapping("/{id}")
+    @GetMapping("/owner/{id}")
     public ResponseEntity<GetUserResponse> getUserById(@PathVariable Long id) {
-        return ResponseEntity.status(HttpStatus.OK).body(userHandler.getUserById(id));
+        return ResponseEntity.status(HttpStatus.OK).body(userHandler.getOwnerById(id));
     }
 }
