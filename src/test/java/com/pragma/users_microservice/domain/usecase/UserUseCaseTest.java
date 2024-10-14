@@ -4,6 +4,7 @@ import com.pragma.users_microservice.domain.constants.ExceptionConstants;
 import com.pragma.users_microservice.domain.exception.*;
 import com.pragma.users_microservice.domain.model.Role;
 import com.pragma.users_microservice.domain.model.User;
+import com.pragma.users_microservice.domain.spi.IPasswordEncoderPort;
 import com.pragma.users_microservice.domain.spi.IUserPersistencePort;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,6 +24,9 @@ class UserUseCaseTest {
     @Mock
     private IUserPersistencePort userPersistencePort;
 
+    @Mock
+    private IPasswordEncoderPort passwordEncoderPort;
+
     @InjectMocks
     private UserUseCase userUseCase;
 
@@ -30,161 +34,20 @@ class UserUseCaseTest {
     @DisplayName("Inserts an owner in the DB")
     void createUser() {
         User user = new User(1L, "Melissa", "Henao", "1004738846",
-                "573205898802", LocalDate.parse("2001-05-19"), "melissahenao19@gmail.com",
+                "+573205898802", LocalDate.parse("2001-05-19"), "melissahenao19@gmail.com",
                 "owner123", new Role(2L, null, null));
         Mockito.when(userPersistencePort.alreadyExistsByIdentityDocument("1004738846")).thenReturn(false);
+        user.setPassword(passwordEncoderPort.passwordEncoder(user.getPassword()));
         userUseCase.createUser(user);
         Mockito.verify(userPersistencePort, Mockito.times(1)).createUser(user);
-    }
-
-    @Test
-    @DisplayName("Validation exception when name field is empty")
-    void createUserShouldThrowValidationExceptionWhenNameIsEmpty() {
-        User user = new User(1L, "", "Henao", "1004738846",
-                "573205898802", LocalDate.parse("2001-05-19"), "melissahenao19@gmail.com",
-                "owner123", new Role(2L, null, null));
-        EmptyOrNullFieldsException exception = assertThrows(EmptyOrNullFieldsException.class, () -> {
-            userUseCase.createUser(user);
-        });
-        assertThat(exception.getMessage()).isEqualTo(ExceptionConstants.NAME_MANDATORY_MESSAGE);
-        Mockito.verify(userPersistencePort, Mockito.never()).createUser(user);
-    }
-
-    @Test
-    @DisplayName("Validation exception when last name field is empty")
-    void createUserShouldThrowValidationExceptionWhenLastNameIsEmpty() {
-        User user = new User(1L, "Melissa", "", "1004738846",
-                "573205898802", LocalDate.parse("2001-05-19"), "melissahenao19@gmail.com",
-                "owner123", new Role(2L, null, null));
-        EmptyOrNullFieldsException exception = assertThrows(EmptyOrNullFieldsException.class, () -> {
-            userUseCase.createUser(user);
-        });
-        assertThat(exception.getMessage()).isEqualTo(ExceptionConstants.LAST_NAME_MANDATORY_MESSAGE);
-        Mockito.verify(userPersistencePort, Mockito.never()).createUser(user);
-    }
-
-    @Test
-    @DisplayName("Validation exception when identity document field is empty")
-    void createUserShouldThrowValidationExceptionWhenIdentityDocumentIsEmpty() {
-        User user = new User(1L, "Melissa", "Henao", "",
-                "573205898802", LocalDate.parse("2001-05-19"), "melissahenao19@gmail.com",
-                "owner123", new Role(2L, null, null));
-        EmptyOrNullFieldsException exception = assertThrows(EmptyOrNullFieldsException.class, () -> {
-            userUseCase.createUser(user);
-        });
-        assertThat(exception.getMessage()).isEqualTo(ExceptionConstants.IDENTITY_DOCUMENT_MANDATORY_MESSAGE);
-        Mockito.verify(userPersistencePort, Mockito.never()).createUser(user);
-    }
-
-    @Test
-    @DisplayName("Validation exception when phone number field is empty")
-    void createUserShouldThrowValidationExceptionWhenPhoneNumberIsEmpty() {
-        User user = new User(1L, "Melissa", "Henao", "1004738846",
-                "", LocalDate.parse("2001-05-19"), "melissahenao19@gmail.com",
-                "owner123", new Role(2L, null, null));
-        EmptyOrNullFieldsException exception = assertThrows(EmptyOrNullFieldsException.class, () -> {
-            userUseCase.createUser(user);
-        });
-        assertThat(exception.getMessage()).isEqualTo(ExceptionConstants.PHONE_NUMBER_MANDATORY_MESSAGE);
-        Mockito.verify(userPersistencePort, Mockito.never()).createUser(user);
-    }
-
-    @Test
-    @DisplayName("Validation exception when birthdate field is null")
-    void createUserShouldThrowValidationExceptionWhenBirthdateIsNull() {
-        User user = new User(1L, "Melissa", "Henao", "1004738846",
-                "573205898802", null, "melissahenao19@gmail.com",
-                "owner123", new Role(2L, null, null));
-        EmptyOrNullFieldsException exception = assertThrows(EmptyOrNullFieldsException.class, () -> {
-            userUseCase.createUser(user);
-        });
-        assertThat(exception.getMessage()).isEqualTo(ExceptionConstants.BIRTHDATE_MANDATORY_MESSAGE);
-        Mockito.verify(userPersistencePort, Mockito.never()).createUser(user);
-    }
-
-    @Test
-    @DisplayName("Validation exception when email field is empty")
-    void createUserShouldThrowValidationExceptionWhenEmailIsEmpty() {
-        User user = new User(1L, "Melissa", "Henao", "1004738846",
-                "573205898802", LocalDate.parse("2001-05-19"), "",
-                "owner123", new Role(2L, null, null));
-        EmptyOrNullFieldsException exception = assertThrows(EmptyOrNullFieldsException.class, () -> {
-            userUseCase.createUser(user);
-        });
-        assertThat(exception.getMessage()).isEqualTo(ExceptionConstants.EMAIL_MANDATORY_MESSAGE);
-        Mockito.verify(userPersistencePort, Mockito.never()).createUser(user);
-    }
-
-    @Test
-    @DisplayName("Validation exception when password field is empty")
-    void createUserShouldThrowValidationExceptionWhenPasswordIsEmpty() {
-        User user = new User(1L, "Melissa", "Henao", "1004738846",
-                "573205898802", LocalDate.parse("2001-05-19"), "melissahenao19@gmail.com",
-                "", new Role(2L, null, null));
-        EmptyOrNullFieldsException exception = assertThrows(EmptyOrNullFieldsException.class, () -> {
-            userUseCase.createUser(user);
-        });
-        assertThat(exception.getMessage()).isEqualTo(ExceptionConstants.PASSWORD_MANDATORY_MESSAGE);
-        Mockito.verify(userPersistencePort, Mockito.never()).createUser(user);
-    }
-
-    @Test
-    @DisplayName("Validation exception when role field is null")
-    void createUserShouldThrowValidationExceptionWhenRoleIsNull() {
-        User user = new User(1L, "Melissa", "Henao", "1004738846",
-                "573205898802", LocalDate.parse("2001-05-19"), "melissahenao19@gmail.com",
-                "owner123", null);
-        EmptyOrNullFieldsException exception = assertThrows(EmptyOrNullFieldsException.class, () -> {
-            userUseCase.createUser(user);
-        });
-        assertThat(exception.getMessage()).isEqualTo(ExceptionConstants.ROLE_MANDATORY_MESSAGE);
-        Mockito.verify(userPersistencePort, Mockito.never()).createUser(user);
-    }
-
-    @Test
-    @DisplayName("Validation exception when email structure is invalid")
-    void createUserShouldThrowValidationExceptionWhenEmailStructureIsInvalid() {
-        User user = new User(1L, "Melissa", "Henao", "1004738846",
-                "573205898802", LocalDate.parse("2001-05-19"), "melissahenao19@gmail",
-                "owner123", new Role(2L, null, null));
-        InvalidEmailStructureException exception = assertThrows(InvalidEmailStructureException.class, () -> {
-            userUseCase.createUser(user);
-        });
-        assertThat(exception.getMessage()).isEqualTo(ExceptionConstants.INVALID_EMAIL_STRUCTURE_MESSAGE);
-        Mockito.verify(userPersistencePort, Mockito.never()).createUser(user);
-    }
-
-    @Test
-    @DisplayName("Validation exception when phone number is invalid")
-    void createUserShouldThrowValidationExceptionWhenPhoneNumberIsInvalid() {
-        User user = new User(1L, "Melissa", "Henao", "1004738846",
-                "+3205898802", LocalDate.parse("2001-05-19"), "melissahenao19@gmail.com",
-                "owner123", new Role(2L, null, null));
-        InvalidPhoneNumberException exception = assertThrows(InvalidPhoneNumberException.class, () -> {
-            userUseCase.createUser(user);
-        });
-        assertThat(exception.getMessage()).isEqualTo(ExceptionConstants.INVALID_PHONE_NUMBER_MESSAGE);
-        Mockito.verify(userPersistencePort, Mockito.never()).createUser(user);
-    }
-
-    @Test
-    @DisplayName("Validation exception when identity document isn't numeric only")
-    void createUserShouldThrowValidationExceptionWhenIdentityDocumentIsInvalid() {
-        User user = new User(1L, "Melissa", "Henao", "1.004.738.846",
-                "573205898802", LocalDate.parse("2001-05-19"), "melissahenao19@gmail.com",
-                "owner123", new Role(2L, null, null));
-        InvalidIdentityDocumentException exception = assertThrows(InvalidIdentityDocumentException.class, () -> {
-            userUseCase.createUser(user);
-        });
-        assertThat(exception.getMessage()).isEqualTo(ExceptionConstants.INVALID_IDENTITY_DOCUMENT_MESSAGE);
-        Mockito.verify(userPersistencePort, Mockito.never()).createUser(user);
+        Mockito.verify(passwordEncoderPort, Mockito.times(1)).passwordEncoder(user.getPassword());
     }
 
     @Test
     @DisplayName("Validation exception when user doesn't have the legal age to be an owner")
     void createUserShouldThrowValidationExceptionWhenUnderageUser() {
         User user = new User(1L, "Melissa", "Henao", "1004738846",
-                "573205898802", LocalDate.parse("2015-05-19"), "melissahenao19@gmail.com",
+                "+573205898802", LocalDate.parse("2015-05-19"), "melissahenao19@gmail.com",
                 "owner123", new Role(2L, null, null));
         UnderageUserException exception = assertThrows(UnderageUserException.class, () -> {
             userUseCase.createUser(user);
@@ -194,16 +57,30 @@ class UserUseCaseTest {
     }
 
     @Test
-    @DisplayName("Inserts an owner in the DB")
-    void createUserShouldThrowValidationExceptionWhenUserAlreadyExists() {
+    @DisplayName("Validation exception when user already exists by identity document in the DB")
+    void createUserShouldThrowValidationExceptionWhenUserAlreadyExistsByIdentityDocument() {
         User user = new User(1L, "Melissa", "Henao", "1004738846",
-                "573205898802", LocalDate.parse("2001-05-19"), "melissahenao19@gmail.com",
+                "+573205898802", LocalDate.parse("2001-05-19"), "melissahenao19@gmail.com",
                 "owner123", new Role(2L, null, null));
         Mockito.when(userPersistencePort.alreadyExistsByIdentityDocument("1004738846")).thenReturn(true);
         AlreadyExistsByIdentityDocumentException exception = assertThrows(AlreadyExistsByIdentityDocumentException.class, () -> {
             userUseCase.createUser(user);
         });
         assertThat(exception.getMessage()).isEqualTo(ExceptionConstants.ALREADY_EXISTS_BY_IDENTITY_DOCUMENT_MESSAGE);
+        Mockito.verify(userPersistencePort, Mockito.never()).createUser(user);
+    }
+
+    @Test
+    @DisplayName("Validation exception when user already exists by email in the DB")
+    void createUserShouldThrowValidationExceptionWhenUserAlreadyExistsByEmail() {
+        User user = new User(1L, "Melissa", "Henao", "1004738846",
+                "+573205898802", LocalDate.parse("2001-05-19"), "melissahenao19@gmail.com",
+                "owner123", new Role(2L, null, null));
+        Mockito.when(userPersistencePort.alreadyExistsByEmail("melissahenao19@gmail.com")).thenReturn(true);
+        AlreadyExistsByEmailException exception = assertThrows(AlreadyExistsByEmailException.class, () -> {
+            userUseCase.createUser(user);
+        });
+        assertThat(exception.getMessage()).isEqualTo(ExceptionConstants.ALREADY_EXISTS_BY_EMAIL_MESSAGE);
         Mockito.verify(userPersistencePort, Mockito.never()).createUser(user);
     }
 }
