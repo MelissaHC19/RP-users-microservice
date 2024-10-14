@@ -15,13 +15,11 @@ import org.springframework.stereotype.Service;
 public class UserHandler implements IUserHandler {
     private final IUserServicePort userServicePort;
     private final IRegisterUserRequestMapper registerUserRequestMapper;
-    private final BCryptPasswordEncoder passwordEncoder;
 
 
     @Override
     public void createUser(RegisterUserRequest registerUserRequest) {
         User user = registerUserRequestMapper.requestToUser(registerUserRequest);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userServicePort.createUser(user);
     }
 }

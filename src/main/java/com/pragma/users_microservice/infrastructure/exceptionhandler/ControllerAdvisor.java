@@ -1,5 +1,6 @@
 package com.pragma.users_microservice.infrastructure.exceptionhandler;
 
+import com.pragma.users_microservice.application.dto.response.ExceptionResponse;
 import com.pragma.users_microservice.domain.exception.*;
 import com.pragma.users_microservice.infrastructure.constants.ControllerConstants;
 import org.springframework.http.HttpStatus;
@@ -15,24 +16,6 @@ import java.util.Map;
 
 @ControllerAdvice
 public class ControllerAdvisor {
-    @ExceptionHandler(InvalidEmailStructureException.class)
-    public ResponseEntity<ExceptionResponse> handleInvalidEmailStructureException(InvalidEmailStructureException exception) {
-        ExceptionResponse response = new ExceptionResponse(exception.getMessage(), HttpStatus.BAD_REQUEST.toString(), LocalDateTime.now());
-        return ResponseEntity.badRequest().body(response);
-    }
-
-    @ExceptionHandler(InvalidIdentityDocumentException.class)
-    public ResponseEntity<ExceptionResponse> handleInvalidIdentityDocumentException(InvalidIdentityDocumentException exception) {
-        ExceptionResponse response = new ExceptionResponse(exception.getMessage(), HttpStatus.BAD_REQUEST.toString(), LocalDateTime.now());
-        return ResponseEntity.badRequest().body(response);
-    }
-
-    @ExceptionHandler(InvalidPhoneNumberException.class)
-    public ResponseEntity<ExceptionResponse> handleInvalidPhoneNumberException(InvalidPhoneNumberException exception) {
-        ExceptionResponse response = new ExceptionResponse(exception.getMessage(), HttpStatus.BAD_REQUEST.toString(), LocalDateTime.now());
-        return ResponseEntity.badRequest().body(response);
-    }
-
     @ExceptionHandler(UnderageUserException.class)
     public ResponseEntity<ExceptionResponse> handleUnderageUserException(UnderageUserException exception) {
         ExceptionResponse response = new ExceptionResponse(exception.getMessage(), HttpStatus.BAD_REQUEST.toString(), LocalDateTime.now());
@@ -45,10 +28,10 @@ public class ControllerAdvisor {
         return ResponseEntity.status(409).body(response);
     }
 
-    @ExceptionHandler(EmptyOrNullFieldsException.class)
-    public ResponseEntity<ExceptionResponse> handleEmptyOrNullFieldsException(EmptyOrNullFieldsException exception) {
-        ExceptionResponse response = new ExceptionResponse(exception.getMessage(), HttpStatus.BAD_REQUEST.toString(), LocalDateTime.now());
-        return ResponseEntity.badRequest().body(response);
+    @ExceptionHandler(AlreadyExistsByEmailException.class)
+    public ResponseEntity<ExceptionResponse> handleAlreadyExistsByEmailException(AlreadyExistsByEmailException exception) {
+        ExceptionResponse response = new ExceptionResponse(exception.getMessage(), HttpStatus.CONFLICT.toString(), LocalDateTime.now());
+        return ResponseEntity.status(409).body(response);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
