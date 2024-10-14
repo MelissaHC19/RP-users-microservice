@@ -1,6 +1,7 @@
 package com.pragma.users_microservice.infrastructure.input.rest;
 
 import com.pragma.users_microservice.application.dto.request.RegisterUserRequest;
+import com.pragma.users_microservice.application.dto.response.ControllerResponse;
 import com.pragma.users_microservice.application.handler.IUserHandler;
 import com.pragma.users_microservice.infrastructure.constants.ControllerConstants;
 import com.pragma.users_microservice.infrastructure.constants.DocumentationConstants;

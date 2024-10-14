@@ -20,4 +20,9 @@ public class UserJpaAdapter implements IUserPersistencePort {
     public boolean alreadyExistsByIdentityDocument(String identityDocument) {
         return userRepository.findByIdentityDocument(identityDocument).isPresent();
     }
+
+    @Override
+    public boolean alreadyExistsByEmail(String email) {
+        return userRepository.findByEmail(email).isPresent();
+    }
 }
