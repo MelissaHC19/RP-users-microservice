@@ -5,5 +5,6 @@ import com.pragma.users_microservice.domain.model.User;
 public interface IUserPersistencePort {
     void createUser(User user);
     boolean alreadyExistsByIdentityDocument(String identityDocument);
+    boolean alreadyExistsByEmail(String email);
     User getUserById(Long id);
 }

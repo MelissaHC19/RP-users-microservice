@@ -8,7 +8,6 @@ import com.pragma.users_microservice.domain.api.IUserServicePort;
 import com.pragma.users_microservice.domain.model.User;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,14 +16,12 @@ import org.springframework.stereotype.Service;
 public class UserHandler implements IUserHandler {
     private final IUserServicePort userServicePort;
     private final IRegisterUserRequestMapper registerUserRequestMapper;
-    private final BCryptPasswordEncoder passwordEncoder;
     private final IGetUserResponseMapper getUserResponseMapper;
 
 
     @Override
     public void createUser(RegisterUserRequest registerUserRequest) {
         User user = registerUserRequestMapper.requestToUser(registerUserRequest);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userServicePort.createUser(user);
     }
 

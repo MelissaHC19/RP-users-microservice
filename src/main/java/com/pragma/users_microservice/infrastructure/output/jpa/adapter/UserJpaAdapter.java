@@ -24,6 +24,10 @@ public class UserJpaAdapter implements IUserPersistencePort {
     }
 
     @Override
+    public boolean alreadyExistsByEmail(String email) {
+        return userRepository.findByEmail(email).isPresent();
+    
+    @Override
     public User getUserById(Long id) {
         return userEntityMapper.entityToUser(userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(String.format(ExceptionConstants.USER_NOT_FOUND_MESSAGE, id))));
