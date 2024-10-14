@@ -6,4 +6,5 @@ public interface IUserPersistencePort {
     void createUser(User user);
     boolean alreadyExistsByIdentityDocument(String identityDocument);
     boolean alreadyExistsByEmail(String email);
+    User getUserById(Long id);
 }

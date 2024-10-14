@@ -3,6 +3,7 @@ package com.pragma.users_microservice.infrastructure.exceptionhandler;
 import com.pragma.users_microservice.application.dto.response.ExceptionResponse;
 import com.pragma.users_microservice.domain.exception.*;
 import com.pragma.users_microservice.infrastructure.constants.ControllerConstants;
+import com.pragma.users_microservice.infrastructure.exception.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -32,6 +33,12 @@ public class ControllerAdvisor {
     public ResponseEntity<ExceptionResponse> handleAlreadyExistsByEmailException(AlreadyExistsByEmailException exception) {
         ExceptionResponse response = new ExceptionResponse(exception.getMessage(), HttpStatus.CONFLICT.toString(), LocalDateTime.now());
         return ResponseEntity.status(409).body(response);
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleUserNotFoundException(UserNotFoundException exception) {
+        ExceptionResponse response = new ExceptionResponse(exception.getMessage(), HttpStatus.NOT_FOUND.toString(), LocalDateTime.now());
+        return ResponseEntity.status(404).body(response);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

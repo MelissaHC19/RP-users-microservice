@@ -26,6 +26,11 @@ public class UserUseCase implements IUserServicePort {
         userPersistencePort.createUser(user);
     }
 
+    @Override
+    public User getUserById(Long id) {
+        return userPersistencePort.getUserById(id);
+    }
+
     private void validateUser(User user) {
         if (user.getBirthdate().isAfter(LocalDate.now().minusYears(UseCaseConstants.LEGAL_AGE))) {
             throw new UnderageUserException(ExceptionConstants.UNDERAGE_USER_MESSAGE);
