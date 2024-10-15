@@ -4,5 +4,5 @@ import com.pragma.users_microservice.domain.model.User;
 
 public interface IUserServicePort {
     void createUser(User user);
-    User getUserById(Long id);
+    boolean getOwnerById(Long id);
 }

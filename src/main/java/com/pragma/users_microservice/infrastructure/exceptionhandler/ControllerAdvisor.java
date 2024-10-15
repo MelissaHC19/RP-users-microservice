@@ -3,7 +3,7 @@ package com.pragma.users_microservice.infrastructure.exceptionhandler;
 import com.pragma.users_microservice.application.dto.response.ExceptionResponse;
 import com.pragma.users_microservice.domain.exception.*;
 import com.pragma.users_microservice.infrastructure.constants.ControllerConstants;
-import com.pragma.users_microservice.infrastructure.exception.UserNotFoundException;
+import com.pragma.users_microservice.domain.exception.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;

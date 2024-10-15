@@ -6,4 +6,5 @@ public class UseCaseConstants {
     }
 
     public static final int LEGAL_AGE = 18;
+    public static final String ROLE_OWNER = "Owner";
 }

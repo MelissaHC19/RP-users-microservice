@@ -83,4 +83,42 @@ class UserUseCaseTest {
         assertThat(exception.getMessage()).isEqualTo(ExceptionConstants.ALREADY_EXISTS_BY_EMAIL_MESSAGE);
         Mockito.verify(userPersistencePort, Mockito.never()).createUser(user);
     }
+
+    @Test
+    @DisplayName("Validation when getting owner by id while creating restaurant, the user exists and it's an owner")
+    void getOwnerByIdReturnsTrueWhenUserHasOwnerRole() {
+        Long ownerId = 1L;
+        User user = new User(1L, "Melissa", "Henao", "1004738846",
+                "+573205898802", LocalDate.parse("2001-05-19"), "melissahenao19@gmail.com",
+                "owner123", new Role(2L, "Owner", null));
+        Mockito.when(userPersistencePort.getOwnerById(ownerId)).thenReturn(user);
+        boolean result = userUseCase.getOwnerById(ownerId);
+        assertTrue(result);
+        Mockito.verify(userPersistencePort, Mockito.times(1)).getOwnerById(ownerId);
+    }
+
+    @Test
+    @DisplayName("Validation when getting owner by id while creating restaurant, the user exists but isn't an owner")
+    void getOwnerByIdReturnsFalseWhenUserDoesNotHaveOwnerRole() {
+        Long ownerId = 1L;
+        User user = new User(1L, "Melissa", "Henao", "1004738846",
+                "+573205898802", LocalDate.parse("2001-05-19"), "melissahenao19@gmail.com",
+                "owner123", new Role(1L, "Admin", null));
+        Mockito.when(userPersistencePort.getOwnerById(ownerId)).thenReturn(user);
+        boolean result = userUseCase.getOwnerById(ownerId);
+        assertFalse(result);
+        Mockito.verify(userPersistencePort, Mockito.times(1)).getOwnerById(ownerId);
+    }
+
+    @Test
+    @DisplayName("Validation when getting owner by id while creating restaurant, the user doesn't exists")
+    void getOwnerByIdShouldThrowValidationExceptionWhenUserNotFound() {
+        Long ownerId = 1L;
+        Mockito.when(userPersistencePort.getOwnerById(ownerId)).thenReturn(null);
+        UserNotFoundException exception = assertThrows(UserNotFoundException.class, () -> {
+            userUseCase.getOwnerById(ownerId);
+        });
+        assertThat(exception.getMessage()).isEqualTo(String.format(ExceptionConstants.USER_NOT_FOUND_MESSAGE, ownerId));
+        Mockito.verify(userPersistencePort, Mockito.times(1)).getOwnerById(ownerId);
+    }
 }

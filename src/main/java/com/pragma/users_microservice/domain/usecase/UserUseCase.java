@@ -27,8 +27,12 @@ public class UserUseCase implements IUserServicePort {
     }
 
     @Override
-    public User getUserById(Long id) {
-        return userPersistencePort.getUserById(id);
+    public boolean getOwnerById(Long id) {
+        User user = userPersistencePort.getOwnerById(id);
+        if (user == null) {
+            throw new UserNotFoundException(String.format(ExceptionConstants.USER_NOT_FOUND_MESSAGE, id));
+        }
+        return user.getRole().getName().equals(UseCaseConstants.ROLE_OWNER);
     }
 
     private void validateUser(User user) {
