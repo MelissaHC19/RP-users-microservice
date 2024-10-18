@@ -6,7 +6,7 @@ public class DocumentationConstants {
         throw new IllegalStateException("Utility class");
     }
 
-    public static final String CREATE_USER_SUMMARY = "Create user";
+    public static final String CREATE_USER_SUMMARY = "Create owner";
     public static final String CREATE_USER_DESCRIPTION = "This endpoint allows the creation of a new restaurant owner account by submitting required fields: first name, last name, numeric identity document, phone number (up to 13 characters, may include +), birthdate, valid email, and a password. To register, the user must be at least 18 years old.";
 
     public static final String GET_USER_SUMMARY = "Get owner by id";
