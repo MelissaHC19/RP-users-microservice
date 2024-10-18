@@ -18,9 +18,9 @@ public class UserHandler implements IUserHandler {
 
 
     @Override
-    public void createUser(RegisterUserRequest registerUserRequest) {
+    public void createOwner(RegisterUserRequest registerUserRequest) {
         User user = registerUserRequestMapper.requestToUser(registerUserRequest);
-        userServicePort.createUser(user);
+        userServicePort.createOwner(user);
     }
 
     @Override

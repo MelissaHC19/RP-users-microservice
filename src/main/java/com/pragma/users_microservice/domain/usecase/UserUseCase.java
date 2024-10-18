@@ -4,6 +4,7 @@ import com.pragma.users_microservice.domain.api.IUserServicePort;
 import com.pragma.users_microservice.domain.constants.ExceptionConstants;
 import com.pragma.users_microservice.domain.constants.UseCaseConstants;
 import com.pragma.users_microservice.domain.exception.*;
+import com.pragma.users_microservice.domain.model.Role;
 import com.pragma.users_microservice.domain.model.User;
 import com.pragma.users_microservice.domain.spi.IPasswordEncoderPort;
 import com.pragma.users_microservice.domain.spi.IUserPersistencePort;
@@ -20,10 +21,11 @@ public class UserUseCase implements IUserServicePort {
     }
 
     @Override
-    public void createUser(User user) {
+    public void createOwner(User user) {
         validateUser(user);
         user.setPassword(passwordEncoderPort.passwordEncoder(user.getPassword()));
-        userPersistencePort.createUser(user);
+        user.setRole(new Role(UseCaseConstants.ROLE_ID_OWNER, null, null));
+        userPersistencePort.createOwner(user);
     }
 
     @Override

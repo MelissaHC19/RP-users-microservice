@@ -3,7 +3,7 @@ package com.pragma.users_microservice.domain.spi;
 import com.pragma.users_microservice.domain.model.User;
 
 public interface IUserPersistencePort {
-    void createUser(User user);
+    void createOwner(User user);
     boolean alreadyExistsByIdentityDocument(String identityDocument);
     boolean alreadyExistsByEmail(String email);
     User getOwnerById(Long id);

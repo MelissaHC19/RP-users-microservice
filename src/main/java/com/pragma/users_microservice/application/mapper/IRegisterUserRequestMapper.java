@@ -10,11 +10,6 @@ import org.mapstruct.Named;
 @Mapper(componentModel = "spring")
 public interface IRegisterUserRequestMapper {
     @Mapping(target = "id", ignore = true)
-    @Mapping(source = "roleID", target = "role", qualifiedByName = "mapRoleIDtoRole")
+    @Mapping(target = "role", ignore = true)
     User requestToUser(RegisterUserRequest registerUserRequest);
-
-    @Named("mapRoleIDtoRole")
-    default Role mapRoleIDtoRole(Long roleID) {
-        return new Role(roleID, null, null);
-    }
 }

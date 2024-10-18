@@ -39,9 +39,9 @@ public class UserRestControllerAdapter {
                     description = DocumentationConstants.CONFLICT_RESPONSE_CODE_DESCRIPTION,
                     content = @Content),
     })
-    @PostMapping("/create")
-    public ResponseEntity<ControllerResponse> createUser(@Valid @RequestBody RegisterUserRequest request) {
-        userHandler.createUser(request);
+    @PostMapping("/create/owner")
+    public ResponseEntity<ControllerResponse> createOwner(@Valid @RequestBody RegisterUserRequest request) {
+        userHandler.createOwner(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ControllerResponse(ControllerConstants.USER_CREATED_MESSAGE, HttpStatus.CREATED.toString(), LocalDateTime.now()));
     }
 
