@@ -1,5 +1,5 @@
 package com.pragma.users_microservice.domain.spi;
 
-public interface IPasswordEncoderPort {
+public interface IEncoderPort {
     String passwordEncoder(String password);
 }

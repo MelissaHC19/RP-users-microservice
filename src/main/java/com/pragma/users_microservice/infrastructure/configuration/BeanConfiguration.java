@@ -1,10 +1,10 @@
 package com.pragma.users_microservice.infrastructure.configuration;
 
 import com.pragma.users_microservice.domain.api.IUserServicePort;
-import com.pragma.users_microservice.domain.spi.IPasswordEncoderPort;
+import com.pragma.users_microservice.domain.spi.IEncoderPort;
 import com.pragma.users_microservice.domain.spi.IUserPersistencePort;
 import com.pragma.users_microservice.domain.usecase.UserUseCase;
-import com.pragma.users_microservice.infrastructure.output.bcrypt.PasswordEncoderAdapter;
+import com.pragma.users_microservice.infrastructure.output.bcrypt.EncoderAdapter;
 import com.pragma.users_microservice.infrastructure.output.jpa.adapter.UserJpaAdapter;
 import com.pragma.users_microservice.infrastructure.output.jpa.mapper.IUserEntityMapper;
 import com.pragma.users_microservice.infrastructure.output.jpa.repository.IUserRepository;
@@ -35,7 +35,7 @@ public class BeanConfiguration {
     }
 
     @Bean
-    public IPasswordEncoderPort passwordEncoderPort() {
-        return new PasswordEncoderAdapter(passwordEncoder());
+    public IEncoderPort passwordEncoderPort() {
+        return new EncoderAdapter(passwordEncoder());
     }
 }

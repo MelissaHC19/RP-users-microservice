@@ -37,7 +37,4 @@ public class RegisterUserRequest {
 
     @NotBlank(message = RequestConstants.PASSWORD_MANDATORY_MESSAGE)
     private String password;
-
-    @NotNull(message = RequestConstants.ROLE_MANDATORY_MESSAGE)
-    private Long roleID;
 }
