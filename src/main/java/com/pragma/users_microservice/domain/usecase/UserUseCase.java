@@ -6,16 +6,16 @@ import com.pragma.users_microservice.domain.constants.UseCaseConstants;
 import com.pragma.users_microservice.domain.exception.*;
 import com.pragma.users_microservice.domain.model.Role;
 import com.pragma.users_microservice.domain.model.User;
-import com.pragma.users_microservice.domain.spi.IPasswordEncoderPort;
+import com.pragma.users_microservice.domain.spi.IEncoderPort;
 import com.pragma.users_microservice.domain.spi.IUserPersistencePort;
 
 import java.time.LocalDate;
 
 public class UserUseCase implements IUserServicePort {
     private final IUserPersistencePort userPersistencePort;
-    private final IPasswordEncoderPort passwordEncoderPort;
+    private final IEncoderPort passwordEncoderPort;
 
-    public UserUseCase(IUserPersistencePort userPersistencePort, IPasswordEncoderPort passwordEncoderPort) {
+    public UserUseCase(IUserPersistencePort userPersistencePort, IEncoderPort passwordEncoderPort) {
         this.userPersistencePort = userPersistencePort;
         this.passwordEncoderPort = passwordEncoderPort;
     }

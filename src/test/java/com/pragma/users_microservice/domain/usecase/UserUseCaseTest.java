@@ -4,7 +4,7 @@ import com.pragma.users_microservice.domain.constants.ExceptionConstants;
 import com.pragma.users_microservice.domain.exception.*;
 import com.pragma.users_microservice.domain.model.Role;
 import com.pragma.users_microservice.domain.model.User;
-import com.pragma.users_microservice.domain.spi.IPasswordEncoderPort;
+import com.pragma.users_microservice.domain.spi.IEncoderPort;
 import com.pragma.users_microservice.domain.spi.IUserPersistencePort;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,7 +25,7 @@ class UserUseCaseTest {
     private IUserPersistencePort userPersistencePort;
 
     @Mock
-    private IPasswordEncoderPort passwordEncoderPort;
+    private IEncoderPort passwordEncoderPort;
 
     @InjectMocks
     private UserUseCase userUseCase;
