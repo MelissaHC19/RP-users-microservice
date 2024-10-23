@@ -7,4 +7,5 @@ public interface IUserPersistencePort {
     boolean alreadyExistsByIdentityDocument(String identityDocument);
     boolean alreadyExistsByEmail(String email);
     User getOwnerById(Long id);
+    User getUserByEmail(String email);
 }
