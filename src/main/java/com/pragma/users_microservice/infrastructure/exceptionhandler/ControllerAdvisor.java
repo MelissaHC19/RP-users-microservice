@@ -41,6 +41,12 @@ public class ControllerAdvisor {
         return ResponseEntity.status(404).body(response);
     }
 
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<ExceptionResponse> handleInvalidCredentialsException(InvalidCredentialsException exception) {
+        ExceptionResponse response = new ExceptionResponse(exception.getMessage(), HttpStatus.UNAUTHORIZED.toString(), LocalDateTime.now());
+        return ResponseEntity.status(401).body(response);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, Object>> handleValidationExceptionsDTO(MethodArgumentNotValidException exception) {
         ArrayList<String> errors = new ArrayList<>();
