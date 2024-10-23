@@ -33,7 +33,7 @@ public class SecurityConfiguration {
                     registry.requestMatchers(SecurityConstants.CREATE_OWNER_PATH).hasRole(SecurityConstants.ROLE_ADMIN);
                     registry.requestMatchers(SecurityConstants.GET_OWNER_BY_ID_PATH).permitAll();
                     registry.requestMatchers(SecurityConstants.LOGIN_PATH).permitAll();
-                    registry.requestMatchers(SecurityConstants.SWAGGER_PATH).permitAll();
+                    registry.requestMatchers(SecurityConstants.SWAGGER_PATH, SecurityConstants.SWAGGER_PATH_2, SecurityConstants.SWAGGER_PATH_3, SecurityConstants.SWAGGER_PATH_4).permitAll();
                 })
                 .exceptionHandling(exceptionHandling -> exceptionHandling
                         .accessDeniedHandler((request, response, accessDeniedException) -> {

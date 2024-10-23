@@ -7,7 +7,8 @@ public class SecurityConstants {
 
     public static final String BEARER_HEADER = "Bearer ";
     public static final int BEGIN_INDEX = 7;
-    public static final String SECRET_KEY = "7OCOuld01GpRMRt3J9KWw1hGcvKTtcbxxfvLNx8JF+g=";
+    public static final String SECRET_KEY_NAME = "secret_key";
+    public static final String SECRET_KEY = System.getenv(SECRET_KEY_NAME);
     public static final String USERNAME_NOT_FOUND_MESSAGE = "Username not found.";
     public static final String EXPIRED_TOKEN_MESSAGE = "{\"message\": \"Token has expired.\"}";
     public static final String INVALID_TOKEN_MESSAGE = "{\"message\": \"Invalid.\"}";
@@ -23,4 +24,7 @@ public class SecurityConstants {
     public static final String CONTENT_TYPE = "application/json";
     public static final String FORBIDDEN_MESSAGE = "{\"message\": \"Access denied. You don't have permission to access this resource.\"}";
     public static final String SWAGGER_PATH = "/swagger-ui/**";
+    public static final String SWAGGER_PATH_2 = "/swaggerDocs";
+    public static final String SWAGGER_PATH_3 = "/v3/api-docs/**";
+    public static final String SWAGGER_PATH_4 = "/swagger-ui.html";
 }
