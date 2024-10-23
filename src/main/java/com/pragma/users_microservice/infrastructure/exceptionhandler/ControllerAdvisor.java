@@ -4,8 +4,6 @@ import com.pragma.users_microservice.application.dto.response.ExceptionResponse;
 import com.pragma.users_microservice.domain.exception.*;
 import com.pragma.users_microservice.infrastructure.constants.ControllerConstants;
 import com.pragma.users_microservice.domain.exception.UserNotFoundException;
-import com.pragma.users_microservice.infrastructure.exceptions.ExpiredTokenException;
-import com.pragma.users_microservice.infrastructure.exceptions.InvalidTokenException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -45,18 +43,6 @@ public class ControllerAdvisor {
 
     @ExceptionHandler(InvalidCredentialsException.class)
     public ResponseEntity<ExceptionResponse> handleInvalidCredentialsException(InvalidCredentialsException exception) {
-        ExceptionResponse response = new ExceptionResponse(exception.getMessage(), HttpStatus.UNAUTHORIZED.toString(), LocalDateTime.now());
-        return ResponseEntity.status(401).body(response);
-    }
-
-    @ExceptionHandler(ExpiredTokenException.class)
-    public ResponseEntity<ExceptionResponse> handleExpiredTokenException(ExpiredTokenException exception) {
-        ExceptionResponse response = new ExceptionResponse(exception.getMessage(), HttpStatus.UNAUTHORIZED.toString(), LocalDateTime.now());
-        return ResponseEntity.status(401).body(response);
-    }
-
-    @ExceptionHandler(InvalidTokenException.class)
-    public ResponseEntity<ExceptionResponse> handleInvalidTokenException(InvalidTokenException exception) {
         ExceptionResponse response = new ExceptionResponse(exception.getMessage(), HttpStatus.UNAUTHORIZED.toString(), LocalDateTime.now());
         return ResponseEntity.status(401).body(response);
     }

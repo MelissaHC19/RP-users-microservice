@@ -2,8 +2,6 @@ package com.pragma.users_microservice.infrastructure.security.filter;
 
 import com.pragma.users_microservice.domain.spi.ITokenProviderPort;
 import com.pragma.users_microservice.infrastructure.constants.SecurityConstants;
-import com.pragma.users_microservice.infrastructure.exceptions.ExpiredTokenException;
-import com.pragma.users_microservice.infrastructure.exceptions.InvalidTokenException;
 import com.pragma.users_microservice.infrastructure.security.service.CustomUserDetails;
 import com.pragma.users_microservice.infrastructure.security.service.CustomUserDetailsService;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -43,9 +41,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             try {
                 subject = tokenProviderPort.extractSubject(token);
             } catch (ExpiredJwtException e) {
-                throw new ExpiredTokenException(SecurityConstants.EXPIRED_TOKEN_MESSAGE);
+                response.setContentType(SecurityConstants.CONTENT_TYPE);
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.getWriter().write(SecurityConstants.EXPIRED_TOKEN_MESSAGE);
             } catch (JwtException jwtException) {
-                throw new InvalidTokenException(SecurityConstants.INVALID_TOKEN_MESSAGE);
+                response.setContentType(SecurityConstants.CONTENT_TYPE);
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.getWriter().write(SecurityConstants.INVALID_TOKEN_MESSAGE);
             }
         }
 

@@ -3,6 +3,7 @@ package com.pragma.users_microservice.infrastructure.configuration;
 import com.pragma.users_microservice.infrastructure.constants.SecurityConstants;
 import com.pragma.users_microservice.infrastructure.security.filter.JwtAuthenticationFilter;
 import com.pragma.users_microservice.infrastructure.security.service.CustomUserDetailsService;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,7 +33,14 @@ public class SecurityConfiguration {
                     registry.requestMatchers(SecurityConstants.CREATE_OWNER_PATH).hasRole(SecurityConstants.ROLE_ADMIN);
                     registry.requestMatchers(SecurityConstants.GET_OWNER_BY_ID_PATH).permitAll();
                     registry.requestMatchers(SecurityConstants.LOGIN_PATH).permitAll();
+                    registry.requestMatchers(SecurityConstants.SWAGGER_PATH).permitAll();
                 })
+                .exceptionHandling(exceptionHandling -> exceptionHandling
+                        .accessDeniedHandler((request, response, accessDeniedException) -> {
+                            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                            response.setContentType(SecurityConstants.CONTENT_TYPE);
+                            response.getWriter().write(SecurityConstants.FORBIDDEN_MESSAGE);
+                }))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }

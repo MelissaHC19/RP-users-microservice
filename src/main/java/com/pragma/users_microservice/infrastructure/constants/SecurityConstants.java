@@ -9,8 +9,8 @@ public class SecurityConstants {
     public static final int BEGIN_INDEX = 7;
     public static final String SECRET_KEY = "7OCOuld01GpRMRt3J9KWw1hGcvKTtcbxxfvLNx8JF+g=";
     public static final String USERNAME_NOT_FOUND_MESSAGE = "Username not found.";
-    public static final String EXPIRED_TOKEN_MESSAGE = "Token has expired.";
-    public static final String INVALID_TOKEN_MESSAGE = "Invalid token.";
+    public static final String EXPIRED_TOKEN_MESSAGE = "{\"message\": \"Token has expired.\"}";
+    public static final String INVALID_TOKEN_MESSAGE = "{\"message\": \"Invalid.\"}";
     public static final String CREATE_OWNER_PATH = "/user/create/owner";
     public static final String GET_OWNER_BY_ID_PATH = "/user/owner/{id}";
     public static final String LOGIN_PATH = "/auth/login/user";
@@ -20,4 +20,7 @@ public class SecurityConstants {
     public static final String CLAIMS_ROLE = "role";
     public static final String CLAIMS_EXP = "exp";
     public static final String AUTHORITY_ROLE_ = "ROLE_";
+    public static final String CONTENT_TYPE = "application/json";
+    public static final String FORBIDDEN_MESSAGE = "{\"message\": \"Access denied. You don't have permission to access this resource.\"}";
+    public static final String SWAGGER_PATH = "/swagger-ui/**";
 }
