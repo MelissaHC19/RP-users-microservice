@@ -31,7 +31,6 @@ public class UserEntity {
     @Column(nullable = false)
     private String phoneNumber;
 
-    @Column(nullable = false)
     private LocalDate birthdate;
 
     @Column(nullable = false)

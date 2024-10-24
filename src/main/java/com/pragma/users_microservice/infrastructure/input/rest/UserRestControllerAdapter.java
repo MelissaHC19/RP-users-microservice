@@ -1,5 +1,6 @@
 package com.pragma.users_microservice.infrastructure.input.rest;
 
+import com.pragma.users_microservice.application.dto.request.RegisterEmployeeRequest;
 import com.pragma.users_microservice.application.dto.request.RegisterUserRequest;
 import com.pragma.users_microservice.application.dto.response.ControllerResponse;
 import com.pragma.users_microservice.application.dto.response.GetUserResponse;
@@ -60,5 +61,11 @@ public class UserRestControllerAdapter {
     @GetMapping("/owner/{id}")
     public ResponseEntity<GetUserResponse> getUserById(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(userHandler.getOwnerById(id));
+    }
+
+    @PostMapping("/create/employee")
+    public ResponseEntity<ControllerResponse> createEmployee(@Valid @RequestBody RegisterEmployeeRequest request) {
+        userHandler.createEmployee(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ControllerResponse(ControllerConstants.USER_CREATED_MESSAGE, HttpStatus.CREATED.toString(), LocalDateTime.now()));
     }
 }

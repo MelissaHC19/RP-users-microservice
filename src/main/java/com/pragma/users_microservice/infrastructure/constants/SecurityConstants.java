@@ -27,4 +27,6 @@ public class SecurityConstants {
     public static final String SWAGGER_PATH_2 = "/swaggerDocs";
     public static final String SWAGGER_PATH_3 = "/v3/api-docs/**";
     public static final String SWAGGER_PATH_4 = "/swagger-ui.html";
+    public static final String CREATE_EMPLOYEE_PATH = "user/create/employee";
+    public static final String ROLE_OWNER = "Owner";
 }
