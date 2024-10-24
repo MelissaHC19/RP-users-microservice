@@ -63,6 +63,21 @@ public class UserRestControllerAdapter {
         return ResponseEntity.status(HttpStatus.OK).body(userHandler.getOwnerById(id));
     }
 
+    @Operation(summary = DocumentationConstants.CREATE_EMPLOYEE_SUMMARY,
+            tags = {DocumentationConstants.USER_TAG},
+            description = DocumentationConstants.CREATE_EMPLOYEE_DESCRIPTION
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = DocumentationConstants.CREATED_STATUS_CODE,
+                    description = DocumentationConstants.CREATED_RESPONSE_CODE_DESCRIPTION,
+                    content = @Content),
+            @ApiResponse(responseCode = DocumentationConstants.BAD_REQUEST_STATUS_CODE,
+                    description = DocumentationConstants.BAD_REQUEST_RESPONSE_CODE_DESCRIPTION,
+                    content = @Content),
+            @ApiResponse(responseCode = DocumentationConstants.CONFLICT_STATUS_CODE,
+                    description = DocumentationConstants.CONFLICT_RESPONSE_CODE_DESCRIPTION,
+                    content = @Content),
+    })
     @PostMapping("/create/employee")
     public ResponseEntity<ControllerResponse> createEmployee(@Valid @RequestBody RegisterEmployeeRequest request) {
         userHandler.createEmployee(request);
