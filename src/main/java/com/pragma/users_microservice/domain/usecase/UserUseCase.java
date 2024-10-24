@@ -22,6 +22,9 @@ public class UserUseCase implements IUserServicePort {
 
     @Override
     public void createOwner(User user) {
+        if (user.getBirthdate().isAfter(LocalDate.now().minusYears(UseCaseConstants.LEGAL_AGE))) {
+            throw new UnderageUserException(ExceptionConstants.UNDERAGE_USER_MESSAGE);
+        }
         validateUser(user);
         user.setPassword(passwordEncoderPort.passwordEncoder(user.getPassword()));
         user.setRole(new Role(UseCaseConstants.ROLE_ID_OWNER, null, null));
@@ -37,10 +40,15 @@ public class UserUseCase implements IUserServicePort {
         return user.getRole().getName().equals(UseCaseConstants.ROLE_OWNER);
     }
 
+    @Override
+    public void createEmployee(User user) {
+        validateUser(user);
+        user.setPassword(passwordEncoderPort.passwordEncoder(user.getPassword()));
+        user.setRole(new Role(UseCaseConstants.ROLE_ID_EMPLOYEE, null, null));
+        userPersistencePort.createEmployee(user);
+    }
+
     private void validateUser(User user) {
-        if (user.getBirthdate().isAfter(LocalDate.now().minusYears(UseCaseConstants.LEGAL_AGE))) {
-            throw new UnderageUserException(ExceptionConstants.UNDERAGE_USER_MESSAGE);
-        }
         if (userPersistencePort.alreadyExistsByIdentityDocument(user.getIdentityDocument())) {
             throw new AlreadyExistsByIdentityDocumentException(ExceptionConstants.ALREADY_EXISTS_BY_IDENTITY_DOCUMENT_MESSAGE);
         }
