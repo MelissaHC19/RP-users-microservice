@@ -30,8 +30,8 @@ public class SecurityConfiguration {
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(registry -> {
-                    registry.requestMatchers(SecurityConstants.CREATE_OWNER_PATH).hasRole(SecurityConstants.ROLE_ADMIN);
-                    registry.requestMatchers(SecurityConstants.GET_OWNER_BY_ID_PATH, SecurityConstants.LOGIN_PATH).permitAll();
+                    registry.requestMatchers(SecurityConstants.CREATE_OWNER_PATH, SecurityConstants.GET_OWNER_BY_ID_PATH).hasRole(SecurityConstants.ROLE_ADMIN);
+                    registry.requestMatchers(SecurityConstants.LOGIN_PATH, SecurityConstants.CREATE_CLIENT_PATH).permitAll();
                     registry.requestMatchers(SecurityConstants.SWAGGER_PATH, SecurityConstants.SWAGGER_PATH_2, SecurityConstants.SWAGGER_PATH_3, SecurityConstants.SWAGGER_PATH_4).permitAll();
                     registry.requestMatchers(SecurityConstants.CREATE_EMPLOYEE_PATH).hasRole(SecurityConstants.ROLE_OWNER);
                 })
