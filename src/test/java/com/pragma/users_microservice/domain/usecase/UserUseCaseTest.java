@@ -35,12 +35,19 @@ class UserUseCaseTest {
     void createOwner() {
         User user = new User(1L, "Melissa", "Henao", "1004738846",
                 "+573205898802", LocalDate.parse("2001-05-19"), "melissahenao19@gmail.com",
-                "owner123", new Role(2L, null, null));
+                "owner123", null);
+        Long roleOwner = 2L;
+        String encodedPassword = "$2a$10$Mh8tJKUQ7RusWMkVXIpXb.PfuxMwGEDCkhIeXTKIGhmL9l/XsJemW";
         Mockito.when(userPersistencePort.alreadyExistsByIdentityDocument("1004738846")).thenReturn(false);
-        user.setPassword(passwordEncoderPort.passwordEncoder(user.getPassword()));
+        Mockito.when(userPersistencePort.alreadyExistsByEmail(user.getEmail())).thenReturn(false);
+        Mockito.when(passwordEncoderPort.passwordEncoder("owner123")).thenReturn(encodedPassword);
         userUseCase.createOwner(user);
+        assertEquals(encodedPassword, user.getPassword());
+        assertEquals(roleOwner, user.getRole().getId());
+        Mockito.verify(userPersistencePort, Mockito.times(1)).alreadyExistsByIdentityDocument(user.getIdentityDocument());
+        Mockito.verify(userPersistencePort, Mockito.times(1)).alreadyExistsByEmail(user.getEmail());
+        Mockito.verify(passwordEncoderPort, Mockito.times(1)).passwordEncoder("owner123");
         Mockito.verify(userPersistencePort, Mockito.times(1)).createOwner(user);
-        Mockito.verify(passwordEncoderPort, Mockito.times(1)).passwordEncoder(user.getPassword());
     }
 
     @Test
@@ -48,7 +55,7 @@ class UserUseCaseTest {
     void createOwnerShouldThrowValidationExceptionWhenUnderageUser() {
         User user = new User(1L, "Melissa", "Henao", "1004738846",
                 "+573205898802", LocalDate.parse("2015-05-19"), "melissahenao19@gmail.com",
-                "owner123", new Role(2L, null, null));
+                "owner123", null);
         UnderageUserException exception = assertThrows(UnderageUserException.class, () -> {
             userUseCase.createOwner(user);
         });
@@ -61,12 +68,13 @@ class UserUseCaseTest {
     void createOwnerShouldThrowValidationExceptionWhenUserAlreadyExistsByIdentityDocument() {
         User user = new User(1L, "Melissa", "Henao", "1004738846",
                 "+573205898802", LocalDate.parse("2001-05-19"), "melissahenao19@gmail.com",
-                "owner123", new Role(2L, null, null));
+                "owner123", null);
         Mockito.when(userPersistencePort.alreadyExistsByIdentityDocument("1004738846")).thenReturn(true);
         AlreadyExistsByIdentityDocumentException exception = assertThrows(AlreadyExistsByIdentityDocumentException.class, () -> {
             userUseCase.createOwner(user);
         });
         assertThat(exception.getMessage()).isEqualTo(ExceptionConstants.ALREADY_EXISTS_BY_IDENTITY_DOCUMENT_MESSAGE);
+        Mockito.verify(userPersistencePort, Mockito.times(1)).alreadyExistsByIdentityDocument(user.getIdentityDocument());
         Mockito.verify(userPersistencePort, Mockito.never()).createOwner(user);
     }
 
@@ -75,12 +83,15 @@ class UserUseCaseTest {
     void createOwnerShouldThrowValidationExceptionWhenUserAlreadyExistsByEmail() {
         User user = new User(1L, "Melissa", "Henao", "1004738846",
                 "+573205898802", LocalDate.parse("2001-05-19"), "melissahenao19@gmail.com",
-                "owner123", new Role(2L, null, null));
+                "owner123", null);
+        Mockito.when(userPersistencePort.alreadyExistsByIdentityDocument("1004738846")).thenReturn(false);
         Mockito.when(userPersistencePort.alreadyExistsByEmail("melissahenao19@gmail.com")).thenReturn(true);
         AlreadyExistsByEmailException exception = assertThrows(AlreadyExistsByEmailException.class, () -> {
             userUseCase.createOwner(user);
         });
         assertThat(exception.getMessage()).isEqualTo(ExceptionConstants.ALREADY_EXISTS_BY_EMAIL_MESSAGE);
+        Mockito.verify(userPersistencePort, Mockito.times(1)).alreadyExistsByIdentityDocument(user.getIdentityDocument());
+        Mockito.verify(userPersistencePort, Mockito.times(1)).alreadyExistsByEmail(user.getEmail());
         Mockito.verify(userPersistencePort, Mockito.never()).createOwner(user);
     }
 
@@ -120,5 +131,57 @@ class UserUseCaseTest {
         });
         assertThat(exception.getMessage()).isEqualTo(String.format(ExceptionConstants.USER_NOT_FOUND_MESSAGE, ownerId));
         Mockito.verify(userPersistencePort, Mockito.times(1)).getOwnerById(ownerId);
+    }
+
+    @Test
+    @DisplayName("Inserts an employee in the DB")
+    void createEmployee() {
+        User user = new User(1L, "Manuel", "Casas", "76123456789",
+                "+573233039679", null, "manuel.casas@yahoo.com.co",
+                "employee123", null);
+        Long roleOwner = 3L;
+        String encodedPassword = "$2a$10$Mh8tJKUQ7RusWMkVXIpXb.PfuxMwGEDCkhIeXTKIGhmL9l/XsJemW";
+        Mockito.when(userPersistencePort.alreadyExistsByIdentityDocument(user.getIdentityDocument())).thenReturn(false);
+        Mockito.when(userPersistencePort.alreadyExistsByEmail(user.getEmail())).thenReturn(false);
+        Mockito.when(passwordEncoderPort.passwordEncoder("employee123")).thenReturn(encodedPassword);
+        userUseCase.createEmployee(user);
+        assertEquals(encodedPassword, user.getPassword());
+        assertEquals(roleOwner, user.getRole().getId());
+        Mockito.verify(userPersistencePort, Mockito.times(1)).alreadyExistsByIdentityDocument(user.getIdentityDocument());
+        Mockito.verify(userPersistencePort, Mockito.times(1)).alreadyExistsByEmail(user.getEmail());
+        Mockito.verify(passwordEncoderPort, Mockito.times(1)).passwordEncoder("employee123");
+        Mockito.verify(userPersistencePort, Mockito.times(1)).createEmployee(user);
+    }
+
+    @Test
+    @DisplayName("Validation exception when employee already exists by identity document in the DB")
+    void createEmployeeShouldThrowValidationExceptionWhenUserAlreadyExistsByIdentityDocument() {
+        User user = new User(1L, "Manuel", "Casas", "76123456789",
+                "+573233039679", null, "manuel.casas@yahoo.com.co",
+                "employee123", null);
+        Mockito.when(userPersistencePort.alreadyExistsByIdentityDocument(user.getIdentityDocument())).thenReturn(true);
+        AlreadyExistsByIdentityDocumentException exception = assertThrows(AlreadyExistsByIdentityDocumentException.class, () -> {
+            userUseCase.createEmployee(user);
+        });
+        assertThat(exception.getMessage()).isEqualTo(ExceptionConstants.ALREADY_EXISTS_BY_IDENTITY_DOCUMENT_MESSAGE);
+        Mockito.verify(userPersistencePort, Mockito.times(1)).alreadyExistsByIdentityDocument(user.getIdentityDocument());
+        Mockito.verify(userPersistencePort, Mockito.never()).createEmployee(user);
+    }
+
+    @Test
+    @DisplayName("Validation exception when employee already exists by email in the DB")
+    void createEmployeeShouldThrowValidationExceptionWhenUserAlreadyExistsByEmail() {
+        User user = new User(1L, "Manuel", "Casas", "76123456789",
+                "+573233039679", null, "manuel.casas@yahoo.com.co",
+                "employee123", null);
+        Mockito.when(userPersistencePort.alreadyExistsByIdentityDocument(user.getIdentityDocument())).thenReturn(false);
+        Mockito.when(userPersistencePort.alreadyExistsByEmail(user.getEmail())).thenReturn(true);
+        AlreadyExistsByEmailException exception = assertThrows(AlreadyExistsByEmailException.class, () -> {
+            userUseCase.createEmployee(user);
+        });
+        assertThat(exception.getMessage()).isEqualTo(ExceptionConstants.ALREADY_EXISTS_BY_EMAIL_MESSAGE);
+        Mockito.verify(userPersistencePort, Mockito.times(1)).alreadyExistsByIdentityDocument(user.getIdentityDocument());
+        Mockito.verify(userPersistencePort, Mockito.times(1)).alreadyExistsByEmail(user.getEmail());
+        Mockito.verify(userPersistencePort, Mockito.never()).createEmployee(user);
     }
 }

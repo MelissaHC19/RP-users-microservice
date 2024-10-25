@@ -7,7 +7,7 @@ import com.pragma.users_microservice.domain.spi.ITokenProviderPort;
 import com.pragma.users_microservice.domain.spi.IUserPersistencePort;
 import com.pragma.users_microservice.domain.usecase.AuthenticationUseCase;
 import com.pragma.users_microservice.domain.usecase.UserUseCase;
-import com.pragma.users_microservice.infrastructure.output.bcrypt.EncoderAdapter;
+import com.pragma.users_microservice.infrastructure.output.bcrypt.adapter.EncoderAdapter;
 import com.pragma.users_microservice.infrastructure.output.jpa.adapter.UserJpaAdapter;
 import com.pragma.users_microservice.infrastructure.output.jpa.mapper.IUserEntityMapper;
 import com.pragma.users_microservice.infrastructure.output.jpa.repository.IUserRepository;
