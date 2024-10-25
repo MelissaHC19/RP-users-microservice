@@ -18,6 +18,9 @@ public class DocumentationConstants {
     public static final String CREATE_EMPLOYEE_SUMMARY = "Create employee";
     public static final String CREATE_EMPLOYEE_DESCRIPTION = "This endpoint allows the creation of a new restaurant employee account by submitting required fields: first name, last name, numeric identity document, phone number (up to 13 characters, may include +), valid email, and a password.";
 
+    public static final String CREATE_CLIENT_SUMMARY = "Create client";
+    public static final String CREATE_CLIENT_DESCRIPTION = "This endpoint allows the creation of a new client account by submitting required fields: first name, last name, numeric identity document, phone number (up to 13 characters, may include +), valid email, and a password.";
+
     public static final String USER_TAG = "User";
 
     public static final String CREATED_STATUS_CODE = "201";
