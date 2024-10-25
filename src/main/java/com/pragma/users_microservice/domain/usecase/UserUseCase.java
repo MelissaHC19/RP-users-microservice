@@ -48,6 +48,14 @@ public class UserUseCase implements IUserServicePort {
         userPersistencePort.createEmployee(user);
     }
 
+    @Override
+    public void createClient(User user) {
+        validateUser(user);
+        user.setPassword(passwordEncoderPort.passwordEncoder(user.getPassword()));
+        user.setRole(new Role(UseCaseConstants.ROLE_ID_CLIENT, null, null));
+        userPersistencePort.createClient(user);
+    }
+
     private void validateUser(User user) {
         if (userPersistencePort.alreadyExistsByIdentityDocument(user.getIdentityDocument())) {
             throw new AlreadyExistsByIdentityDocumentException(ExceptionConstants.ALREADY_EXISTS_BY_IDENTITY_DOCUMENT_MESSAGE);

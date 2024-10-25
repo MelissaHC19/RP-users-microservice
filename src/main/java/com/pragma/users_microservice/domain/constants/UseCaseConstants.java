@@ -12,4 +12,5 @@ public class UseCaseConstants {
     public static final String CLAIMS_ROLE = "role";
     public static final Long EXPIRES_AT = 1000L;
     public static final Long ROLE_ID_EMPLOYEE = 3L;
+    public static final Long ROLE_ID_CLIENT = 4L;
 }

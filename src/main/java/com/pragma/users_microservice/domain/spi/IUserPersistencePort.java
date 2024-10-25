@@ -9,4 +9,5 @@ public interface IUserPersistencePort {
     User getOwnerById(Long id);
     User getUserByEmail(String email);
     void createEmployee(User user);
+    void  createClient(User user);
 }
