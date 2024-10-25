@@ -1,4 +1,4 @@
-package com.pragma.users_microservice.infrastructure.output.bcrypt;
+package com.pragma.users_microservice.infrastructure.output.bcrypt.adapter;
 
 import com.pragma.users_microservice.domain.spi.IEncoderPort;
 import lombok.RequiredArgsConstructor;
