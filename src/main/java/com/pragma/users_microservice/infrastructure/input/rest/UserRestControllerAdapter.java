@@ -1,7 +1,7 @@
 package com.pragma.users_microservice.infrastructure.input.rest;
 
-import com.pragma.users_microservice.application.dto.request.RegisterEmployeeRequest;
 import com.pragma.users_microservice.application.dto.request.RegisterUserRequest;
+import com.pragma.users_microservice.application.dto.request.RegisterOwnerRequest;
 import com.pragma.users_microservice.application.dto.response.ControllerResponse;
 import com.pragma.users_microservice.application.dto.response.GetUserResponse;
 import com.pragma.users_microservice.application.handler.IUserHandler;
@@ -41,7 +41,7 @@ public class UserRestControllerAdapter {
                     content = @Content),
     })
     @PostMapping("/create/owner")
-    public ResponseEntity<ControllerResponse> createOwner(@Valid @RequestBody RegisterUserRequest request) {
+    public ResponseEntity<ControllerResponse> createOwner(@Valid @RequestBody RegisterOwnerRequest request) {
         userHandler.createOwner(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ControllerResponse(ControllerConstants.USER_CREATED_MESSAGE, HttpStatus.CREATED.toString(), LocalDateTime.now()));
     }
@@ -59,7 +59,7 @@ public class UserRestControllerAdapter {
                     content = @Content),
     })
     @GetMapping("/owner/{id}")
-    public ResponseEntity<GetUserResponse> getUserById(@PathVariable Long id) {
+    public ResponseEntity<GetUserResponse> getOwnerById(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(userHandler.getOwnerById(id));
     }
 
@@ -79,8 +79,14 @@ public class UserRestControllerAdapter {
                     content = @Content),
     })
     @PostMapping("/create/employee")
-    public ResponseEntity<ControllerResponse> createEmployee(@Valid @RequestBody RegisterEmployeeRequest request) {
+    public ResponseEntity<ControllerResponse> createEmployee(@Valid @RequestBody RegisterUserRequest request) {
         userHandler.createEmployee(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ControllerResponse(ControllerConstants.USER_CREATED_MESSAGE, HttpStatus.CREATED.toString(), LocalDateTime.now()));
+    }
+
+    @PostMapping("/create/client")
+    public ResponseEntity<ControllerResponse> createClient(@Valid @RequestBody RegisterUserRequest request) {
+        userHandler.createClient(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ControllerResponse(ControllerConstants.USER_CREATED_MESSAGE, HttpStatus.CREATED.toString(), LocalDateTime.now()));
     }
 }

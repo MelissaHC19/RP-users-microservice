@@ -9,5 +9,6 @@ import org.mapstruct.Mapping;
 public interface IRegisterUserRequestMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "role", ignore = true)
+    @Mapping(target = "birthdate", ignore = true)
     User requestToUser(RegisterUserRequest registerUserRequest);
 }

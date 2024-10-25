@@ -1,10 +1,10 @@
 package com.pragma.users_microservice.application.handler;
 
-import com.pragma.users_microservice.application.dto.request.RegisterEmployeeRequest;
 import com.pragma.users_microservice.application.dto.request.RegisterUserRequest;
+import com.pragma.users_microservice.application.dto.request.RegisterOwnerRequest;
 import com.pragma.users_microservice.application.dto.response.GetUserResponse;
-import com.pragma.users_microservice.application.mapper.IRegisterEmployeeRequestMapper;
 import com.pragma.users_microservice.application.mapper.IRegisterUserRequestMapper;
+import com.pragma.users_microservice.application.mapper.IRegisterOwnerRequestMapper;
 import com.pragma.users_microservice.domain.api.IUserServicePort;
 import com.pragma.users_microservice.domain.model.User;
 import jakarta.transaction.Transactional;
@@ -16,13 +16,13 @@ import org.springframework.stereotype.Service;
 @Transactional
 public class UserHandler implements IUserHandler {
     private final IUserServicePort userServicePort;
+    private final IRegisterOwnerRequestMapper registerOwnerRequestMapper;
     private final IRegisterUserRequestMapper registerUserRequestMapper;
-    private final IRegisterEmployeeRequestMapper registerEmployeeRequestMapper;
 
 
     @Override
-    public void createOwner(RegisterUserRequest registerUserRequest) {
-        User user = registerUserRequestMapper.requestToUser(registerUserRequest);
+    public void createOwner(RegisterOwnerRequest registerOwnerRequest) {
+        User user = registerOwnerRequestMapper.requestToUser(registerOwnerRequest);
         userServicePort.createOwner(user);
     }
 
@@ -32,8 +32,14 @@ public class UserHandler implements IUserHandler {
     }
 
     @Override
-    public void createEmployee(RegisterEmployeeRequest registerEmployeeRequest) {
-        User user = registerEmployeeRequestMapper.requestToUser(registerEmployeeRequest);
+    public void createEmployee(RegisterUserRequest registerUserRequest) {
+        User user = registerUserRequestMapper.requestToUser(registerUserRequest);
         userServicePort.createEmployee(user);
+    }
+
+    @Override
+    public void createClient(RegisterUserRequest registerUserRequest) {
+        User user = registerUserRequestMapper.requestToUser(registerUserRequest);
+        userServicePort.createClient(user);
     }
 }
