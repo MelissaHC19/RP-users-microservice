@@ -107,6 +107,15 @@ public class UserRestControllerAdapter {
         return ResponseEntity.status(HttpStatus.CREATED).body(new ControllerResponse(ControllerConstants.USER_CREATED_MESSAGE, HttpStatus.CREATED.toString(), LocalDateTime.now()));
     }
 
+    @Operation(summary = DocumentationConstants.GET_EMPLOYEES_RESTAURANT_SUMMARY,
+            tags = {DocumentationConstants.USER_TAG},
+            description = DocumentationConstants.GET_EMPLOYEES_RESTAURANT_DESCRIPTION
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = DocumentationConstants.OK_STATUS_CODE,
+                    description = DocumentationConstants.OK_RESPONSE_CODE_DESCRIPTION_RESTAURANT,
+                    content = @Content),
+    })
     @GetMapping("/employee/{employeeId}")
     public ResponseEntity<GetEmployeesRestaurantResponse> getEmployeesRestaurant(@PathVariable Long employeeId) {
         return ResponseEntity.status(HttpStatus.OK).body(userHandler.getEmployeesRestaurant(employeeId));
