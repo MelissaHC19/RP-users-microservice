@@ -54,4 +54,8 @@ public class CustomUserDetails implements UserDetails {
     public boolean isEnabled() {
         return isActive;
     }
+
+    public String getUserId() {
+        return userId;
+    }
 }

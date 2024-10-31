@@ -47,6 +47,12 @@ public class ControllerAdvisor {
         return ResponseEntity.status(401).body(response);
     }
 
+    @ExceptionHandler(RestaurantNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleRestaurantNotFoundException(RestaurantNotFoundException exception) {
+        ExceptionResponse response = new ExceptionResponse(exception.getMessage(), HttpStatus.FORBIDDEN.toString(), LocalDateTime.now());
+        return ResponseEntity.status(403).body(response);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, Object>> handleValidationExceptionsDTO(MethodArgumentNotValidException exception) {
         ArrayList<String> errors = new ArrayList<>();

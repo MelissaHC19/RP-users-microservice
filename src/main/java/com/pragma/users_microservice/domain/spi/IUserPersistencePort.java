@@ -8,6 +8,6 @@ public interface IUserPersistencePort {
     boolean alreadyExistsByEmail(String email);
     User getOwnerById(Long id);
     User getUserByEmail(String email);
-    void createEmployee(User user);
+    User createEmployee(User user);
     void  createClient(User user);
 }
