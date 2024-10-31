@@ -1,9 +1,13 @@
 package com.pragma.users_microservice.domain.usecase;
 
+import com.pragma.users_microservice.domain.api.IRestaurantServicePort;
 import com.pragma.users_microservice.domain.constants.ExceptionConstants;
 import com.pragma.users_microservice.domain.exception.*;
+import com.pragma.users_microservice.domain.model.Employee;
 import com.pragma.users_microservice.domain.model.Role;
 import com.pragma.users_microservice.domain.model.User;
+import com.pragma.users_microservice.domain.spi.IAuthenticationPort;
+import com.pragma.users_microservice.domain.spi.IEmployeePersistencePort;
 import com.pragma.users_microservice.domain.spi.IEncoderPort;
 import com.pragma.users_microservice.domain.spi.IUserPersistencePort;
 import org.junit.jupiter.api.DisplayName;
@@ -26,6 +30,15 @@ class UserUseCaseTest {
 
     @Mock
     private IEncoderPort passwordEncoderPort;
+
+    @Mock
+    private IRestaurantServicePort restaurantServicePort;
+
+    @Mock
+    private IAuthenticationPort authenticationPort;
+
+    @Mock
+    private IEmployeePersistencePort employeePersistencePort;
 
     @InjectMocks
     private UserUseCase userUseCase;
@@ -139,16 +152,27 @@ class UserUseCaseTest {
         User user = new User(1L, "Manuel", "Casas", "76123456789",
                 "+573233039679", null, "manuel.casas@yahoo.com.co",
                 "employee123", null);
-        Long roleOwner = 3L;
+        Long roleEmployee = 3L;
+        Long restaurantId = 1L;
+        Long ownerId = 2L;
         String encodedPassword = "$2a$10$Mh8tJKUQ7RusWMkVXIpXb.PfuxMwGEDCkhIeXTKIGhmL9l/XsJemW";
         Mockito.when(userPersistencePort.alreadyExistsByIdentityDocument(user.getIdentityDocument())).thenReturn(false);
         Mockito.when(userPersistencePort.alreadyExistsByEmail(user.getEmail())).thenReturn(false);
+        Mockito.when(authenticationPort.getUserId()).thenReturn(ownerId);
+        Mockito.when(restaurantServicePort.getRestaurantById(restaurantId, ownerId)).thenReturn(true);
         Mockito.when(passwordEncoderPort.passwordEncoder("employee123")).thenReturn(encodedPassword);
-        userUseCase.createEmployee(user);
+        User userSaved = new User(1L, "Manuel", "Casas", "76123456789",
+                "+573233039679", null, "manuel.casas@yahoo.com.co",
+                encodedPassword, new Role(roleEmployee, null, null));
+        Mockito.when(userPersistencePort.createEmployee(user)).thenReturn(userSaved);
+        employeePersistencePort.createEmployee(new Employee(null, userSaved.getId(), restaurantId));
+        userUseCase.createEmployee(user, restaurantId);
         assertEquals(encodedPassword, user.getPassword());
-        assertEquals(roleOwner, user.getRole().getId());
+        assertEquals(roleEmployee, user.getRole().getId());
         Mockito.verify(userPersistencePort, Mockito.times(1)).alreadyExistsByIdentityDocument(user.getIdentityDocument());
         Mockito.verify(userPersistencePort, Mockito.times(1)).alreadyExistsByEmail(user.getEmail());
+        Mockito.verify(authenticationPort, Mockito.times(1)).getUserId();
+        Mockito.verify(restaurantServicePort, Mockito.times(1)).getRestaurantById(restaurantId, ownerId);
         Mockito.verify(passwordEncoderPort, Mockito.times(1)).passwordEncoder("employee123");
         Mockito.verify(userPersistencePort, Mockito.times(1)).createEmployee(user);
     }
@@ -159,29 +183,54 @@ class UserUseCaseTest {
         User user = new User(1L, "Manuel", "Casas", "76123456789",
                 "+573233039679", null, "manuel.casas@yahoo.com.co",
                 "employee123", null);
+        Long restaurantId = 1L;
         Mockito.when(userPersistencePort.alreadyExistsByIdentityDocument(user.getIdentityDocument())).thenReturn(true);
         AlreadyExistsByIdentityDocumentException exception = assertThrows(AlreadyExistsByIdentityDocumentException.class, () -> {
-            userUseCase.createEmployee(user);
+            userUseCase.createEmployee(user, restaurantId);
         });
         assertThat(exception.getMessage()).isEqualTo(ExceptionConstants.ALREADY_EXISTS_BY_IDENTITY_DOCUMENT_MESSAGE);
         Mockito.verify(userPersistencePort, Mockito.times(1)).alreadyExistsByIdentityDocument(user.getIdentityDocument());
         Mockito.verify(userPersistencePort, Mockito.never()).createEmployee(user);
     }
-
+//
     @Test
     @DisplayName("Validation exception when employee already exists by email in the DB")
     void createEmployeeShouldThrowValidationExceptionWhenUserAlreadyExistsByEmail() {
         User user = new User(1L, "Manuel", "Casas", "76123456789",
                 "+573233039679", null, "manuel.casas@yahoo.com.co",
                 "employee123", null);
+        Long restaurantId = 1L;
         Mockito.when(userPersistencePort.alreadyExistsByIdentityDocument(user.getIdentityDocument())).thenReturn(false);
         Mockito.when(userPersistencePort.alreadyExistsByEmail(user.getEmail())).thenReturn(true);
         AlreadyExistsByEmailException exception = assertThrows(AlreadyExistsByEmailException.class, () -> {
-            userUseCase.createEmployee(user);
+            userUseCase.createEmployee(user, restaurantId);
         });
         assertThat(exception.getMessage()).isEqualTo(ExceptionConstants.ALREADY_EXISTS_BY_EMAIL_MESSAGE);
         Mockito.verify(userPersistencePort, Mockito.times(1)).alreadyExistsByIdentityDocument(user.getIdentityDocument());
         Mockito.verify(userPersistencePort, Mockito.times(1)).alreadyExistsByEmail(user.getEmail());
+        Mockito.verify(userPersistencePort, Mockito.never()).createEmployee(user);
+    }
+
+    @Test
+    @DisplayName("Validation exception when the restaurant doesn't exist or doesn't belong to the owner creating the employee")
+    void createEmployeeShouldThrowValidationExceptionWhenRestaurantDoesNotExistOrDoesNotBelongToOwner() {
+        User user = new User(1L, "Manuel", "Casas", "76123456789",
+                "+573233039679", null, "manuel.casas@yahoo.com.co",
+                "employee123", null);
+        Long restaurantId = 1L;
+        Long ownerId = 2L;
+        Mockito.when(userPersistencePort.alreadyExistsByIdentityDocument(user.getIdentityDocument())).thenReturn(false);
+        Mockito.when(userPersistencePort.alreadyExistsByEmail(user.getEmail())).thenReturn(false);
+        Mockito.when(authenticationPort.getUserId()).thenReturn(ownerId);
+        Mockito.when(restaurantServicePort.getRestaurantById(restaurantId, ownerId)).thenReturn(false);
+        RestaurantNotFoundException exception = assertThrows(RestaurantNotFoundException.class, () -> {
+            userUseCase.createEmployee(user, restaurantId);
+        });
+        assertThat(exception.getMessage()).isEqualTo(ExceptionConstants.RESTAURANT_NOT_FOUND_MESSAGE);
+        Mockito.verify(userPersistencePort, Mockito.times(1)).alreadyExistsByIdentityDocument(user.getIdentityDocument());
+        Mockito.verify(userPersistencePort, Mockito.times(1)).alreadyExistsByEmail(user.getEmail());
+        Mockito.verify(authenticationPort, Mockito.times(1)).getUserId();
+        Mockito.verify(restaurantServicePort, Mockito.times(1)).getRestaurantById(restaurantId, ownerId);
         Mockito.verify(userPersistencePort, Mockito.never()).createEmployee(user);
     }
 
@@ -235,5 +284,19 @@ class UserUseCaseTest {
         Mockito.verify(userPersistencePort, Mockito.times(1)).alreadyExistsByIdentityDocument(user.getIdentityDocument());
         Mockito.verify(userPersistencePort, Mockito.times(1)).alreadyExistsByEmail(user.getEmail());
         Mockito.verify(userPersistencePort, Mockito.never()).createClient(user);
+    }
+
+    @Test
+    @DisplayName("Returns restaurant id from an employee successfully")
+    void getEmployeesRestaurant() {
+        Long employeeId = 1L;
+        Long restaurantId = 10L;
+        Employee employee = new Employee(1L, employeeId, restaurantId);
+        Mockito.when(employeePersistencePort.getEmployeesRestaurant(employeeId)).thenReturn(employee);
+
+        Long result = userUseCase.getEmployeesRestaurant(employeeId);
+
+        assertEquals(restaurantId, result);
+        Mockito.verify(employeePersistencePort, Mockito.times(1)).getEmployeesRestaurant(employeeId);
     }
 }
