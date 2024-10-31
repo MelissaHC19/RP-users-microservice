@@ -25,4 +25,6 @@ public class RequestConstants {
     public static final String INVALID_EMAIL_STRUCTURE_MESSAGE = "Invalid email structure.";
 
     public static final String PASSWORD_MANDATORY_MESSAGE = "Password must be provided.";
+
+    public static final String RESTAURANT_ID_MANDATORY_MESSAGE = "Restaurant id must be provided.";
 }

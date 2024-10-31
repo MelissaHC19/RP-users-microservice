@@ -1,16 +1,19 @@
 package com.pragma.users_microservice.infrastructure.configuration;
 
 import com.pragma.users_microservice.domain.api.IAuthenticationServicePort;
+import com.pragma.users_microservice.domain.api.IRestaurantServicePort;
 import com.pragma.users_microservice.domain.api.IUserServicePort;
-import com.pragma.users_microservice.domain.spi.IEncoderPort;
-import com.pragma.users_microservice.domain.spi.ITokenProviderPort;
-import com.pragma.users_microservice.domain.spi.IUserPersistencePort;
+import com.pragma.users_microservice.domain.spi.*;
 import com.pragma.users_microservice.domain.usecase.AuthenticationUseCase;
 import com.pragma.users_microservice.domain.usecase.UserUseCase;
 import com.pragma.users_microservice.infrastructure.output.bcrypt.adapter.EncoderAdapter;
+import com.pragma.users_microservice.infrastructure.output.jpa.adapter.EmployeeJpaAdapter;
 import com.pragma.users_microservice.infrastructure.output.jpa.adapter.UserJpaAdapter;
+import com.pragma.users_microservice.infrastructure.output.jpa.mapper.IEmployeeEntityMapper;
 import com.pragma.users_microservice.infrastructure.output.jpa.mapper.IUserEntityMapper;
+import com.pragma.users_microservice.infrastructure.output.jpa.repository.IEmployeeRepository;
 import com.pragma.users_microservice.infrastructure.output.jpa.repository.IUserRepository;
+import com.pragma.users_microservice.infrastructure.security.adapter.AuthenticationAdapter;
 import com.pragma.users_microservice.infrastructure.security.adapter.TokenAdapter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -22,6 +25,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class BeanConfiguration {
     private final IUserEntityMapper userEntityMapper;
     private final IUserRepository userRepository;
+    private final IEmployeeEntityMapper employeeEntityMapper;
+    private final IEmployeeRepository employeeRepository;
+    private final IRestaurantServicePort restaurantServicePort;
 
     @Bean
     public IUserPersistencePort userPersistencePort() {
@@ -30,7 +36,7 @@ public class BeanConfiguration {
 
     @Bean
     public IUserServicePort userServicePort() {
-        return new UserUseCase(userPersistencePort(), passwordEncoderPort());
+        return new UserUseCase(userPersistencePort(), passwordEncoderPort(), restaurantServicePort, authenticationPort(), employeePersistencePort());
     }
 
     @Bean
@@ -51,5 +57,15 @@ public class BeanConfiguration {
     @Bean
     public IAuthenticationServicePort authenticationServicePort() {
         return new AuthenticationUseCase(passwordEncoderPort(), userPersistencePort(), tokenProviderPort());
+    }
+
+    @Bean
+    public IAuthenticationPort authenticationPort() {
+        return new AuthenticationAdapter();
+    }
+
+    @Bean
+    public IEmployeePersistencePort employeePersistencePort() {
+        return new EmployeeJpaAdapter(employeeRepository, employeeEntityMapper);
     }
 }

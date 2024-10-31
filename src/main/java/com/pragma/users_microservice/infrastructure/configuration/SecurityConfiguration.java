@@ -34,6 +34,7 @@ public class SecurityConfiguration {
                     registry.requestMatchers(SecurityConstants.LOGIN_PATH, SecurityConstants.CREATE_CLIENT_PATH).permitAll();
                     registry.requestMatchers(SecurityConstants.SWAGGER_PATH, SecurityConstants.SWAGGER_PATH_2, SecurityConstants.SWAGGER_PATH_3, SecurityConstants.SWAGGER_PATH_4).permitAll();
                     registry.requestMatchers(SecurityConstants.CREATE_EMPLOYEE_PATH).hasRole(SecurityConstants.ROLE_OWNER);
+                    registry.requestMatchers(SecurityConstants.GET_EMPLOYEES_RESTAURANT_PATH).permitAll();
                 })
                 .exceptionHandling(exceptionHandling -> exceptionHandling
                         .accessDeniedHandler((request, response, accessDeniedException) -> {

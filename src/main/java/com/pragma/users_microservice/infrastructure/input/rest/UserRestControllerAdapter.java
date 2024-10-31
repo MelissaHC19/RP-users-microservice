@@ -1,8 +1,10 @@
 package com.pragma.users_microservice.infrastructure.input.rest;
 
+import com.pragma.users_microservice.application.dto.request.RegisterEmployeeRequest;
 import com.pragma.users_microservice.application.dto.request.RegisterUserRequest;
 import com.pragma.users_microservice.application.dto.request.RegisterOwnerRequest;
 import com.pragma.users_microservice.application.dto.response.ControllerResponse;
+import com.pragma.users_microservice.application.dto.response.GetEmployeesRestaurantResponse;
 import com.pragma.users_microservice.application.dto.response.GetUserResponse;
 import com.pragma.users_microservice.application.handler.IUserHandler;
 import com.pragma.users_microservice.infrastructure.constants.ControllerConstants;
@@ -79,7 +81,7 @@ public class UserRestControllerAdapter {
                     content = @Content),
     })
     @PostMapping("/create/employee")
-    public ResponseEntity<ControllerResponse> createEmployee(@Valid @RequestBody RegisterUserRequest request) {
+    public ResponseEntity<ControllerResponse> createEmployee(@Valid @RequestBody RegisterEmployeeRequest request) {
         userHandler.createEmployee(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ControllerResponse(ControllerConstants.USER_CREATED_MESSAGE, HttpStatus.CREATED.toString(), LocalDateTime.now()));
     }
@@ -103,5 +105,19 @@ public class UserRestControllerAdapter {
     public ResponseEntity<ControllerResponse> createClient(@Valid @RequestBody RegisterUserRequest request) {
         userHandler.createClient(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ControllerResponse(ControllerConstants.USER_CREATED_MESSAGE, HttpStatus.CREATED.toString(), LocalDateTime.now()));
+    }
+
+    @Operation(summary = DocumentationConstants.GET_EMPLOYEES_RESTAURANT_SUMMARY,
+            tags = {DocumentationConstants.USER_TAG},
+            description = DocumentationConstants.GET_EMPLOYEES_RESTAURANT_DESCRIPTION
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = DocumentationConstants.OK_STATUS_CODE,
+                    description = DocumentationConstants.OK_RESPONSE_CODE_DESCRIPTION_RESTAURANT,
+                    content = @Content),
+    })
+    @GetMapping("/employee/{employeeId}")
+    public ResponseEntity<GetEmployeesRestaurantResponse> getEmployeesRestaurant(@PathVariable Long employeeId) {
+        return ResponseEntity.status(HttpStatus.OK).body(userHandler.getEmployeesRestaurant(employeeId));
     }
 }

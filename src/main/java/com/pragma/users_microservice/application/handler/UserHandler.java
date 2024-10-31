@@ -1,8 +1,11 @@
 package com.pragma.users_microservice.application.handler;
 
+import com.pragma.users_microservice.application.dto.request.RegisterEmployeeRequest;
 import com.pragma.users_microservice.application.dto.request.RegisterUserRequest;
 import com.pragma.users_microservice.application.dto.request.RegisterOwnerRequest;
+import com.pragma.users_microservice.application.dto.response.GetEmployeesRestaurantResponse;
 import com.pragma.users_microservice.application.dto.response.GetUserResponse;
+import com.pragma.users_microservice.application.mapper.IRegisterEmployeeRequestMapper;
 import com.pragma.users_microservice.application.mapper.IRegisterUserRequestMapper;
 import com.pragma.users_microservice.application.mapper.IRegisterOwnerRequestMapper;
 import com.pragma.users_microservice.domain.api.IUserServicePort;
@@ -18,6 +21,7 @@ public class UserHandler implements IUserHandler {
     private final IUserServicePort userServicePort;
     private final IRegisterOwnerRequestMapper registerOwnerRequestMapper;
     private final IRegisterUserRequestMapper registerUserRequestMapper;
+    private final IRegisterEmployeeRequestMapper registerEmployeeRequestMapper;
 
 
     @Override
@@ -32,14 +36,20 @@ public class UserHandler implements IUserHandler {
     }
 
     @Override
-    public void createEmployee(RegisterUserRequest registerUserRequest) {
-        User user = registerUserRequestMapper.requestToUser(registerUserRequest);
-        userServicePort.createEmployee(user);
+    public void createEmployee(RegisterEmployeeRequest registerEmployeeRequest) {
+        User user = registerEmployeeRequestMapper.requestToUser(registerEmployeeRequest);
+        Long restaurantId = registerEmployeeRequest.getRestaurantId();
+        userServicePort.createEmployee(user, restaurantId);
     }
 
     @Override
     public void createClient(RegisterUserRequest registerUserRequest) {
         User user = registerUserRequestMapper.requestToUser(registerUserRequest);
         userServicePort.createClient(user);
+    }
+
+    @Override
+    public GetEmployeesRestaurantResponse getEmployeesRestaurant(Long employeeId) {
+        return new GetEmployeesRestaurantResponse(userServicePort.getEmployeesRestaurant(employeeId));
     }
 }
