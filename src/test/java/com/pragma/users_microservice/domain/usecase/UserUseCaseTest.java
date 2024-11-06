@@ -299,4 +299,19 @@ class UserUseCaseTest {
         assertEquals(restaurantId, result);
         Mockito.verify(employeePersistencePort, Mockito.times(1)).getEmployeesRestaurant(employeeId);
     }
+
+    @Test
+    @DisplayName("Returns client's phone number successfully")
+    void getClientsPhoneNumber() {
+        Long clientId = 1L;
+        String phoneNumber = "+573233038679";
+        User client = new User(1L, null, null, null, "+573233038679",
+                null, null, null, null);
+        Mockito.when(userPersistencePort.getOwnerById(clientId)).thenReturn(client);
+
+        String result = userUseCase.getClientsPhoneNumber(clientId);
+
+        assertEquals(phoneNumber, result);
+        Mockito.verify(userPersistencePort, Mockito.times(1)).getOwnerById(clientId);
+    }
 }
