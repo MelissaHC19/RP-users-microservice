@@ -3,6 +3,7 @@ package com.pragma.users_microservice.application.handler;
 import com.pragma.users_microservice.application.dto.request.RegisterEmployeeRequest;
 import com.pragma.users_microservice.application.dto.request.RegisterUserRequest;
 import com.pragma.users_microservice.application.dto.request.RegisterOwnerRequest;
+import com.pragma.users_microservice.application.dto.response.GetClientsPhoneNumberResponse;
 import com.pragma.users_microservice.application.dto.response.GetEmployeesRestaurantResponse;
 import com.pragma.users_microservice.application.dto.response.GetUserResponse;
 import com.pragma.users_microservice.application.mapper.IRegisterEmployeeRequestMapper;
@@ -51,5 +52,10 @@ public class UserHandler implements IUserHandler {
     @Override
     public GetEmployeesRestaurantResponse getEmployeesRestaurant(Long employeeId) {
         return new GetEmployeesRestaurantResponse(userServicePort.getEmployeesRestaurant(employeeId));
+    }
+
+    @Override
+    public GetClientsPhoneNumberResponse getClientsPhoneNumber(Long clientId) {
+        return new GetClientsPhoneNumberResponse(userServicePort.getClientsPhoneNumber(clientId));
     }
 }

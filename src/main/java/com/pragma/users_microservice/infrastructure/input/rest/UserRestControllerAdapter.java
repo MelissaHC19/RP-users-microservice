@@ -4,6 +4,7 @@ import com.pragma.users_microservice.application.dto.request.RegisterEmployeeReq
 import com.pragma.users_microservice.application.dto.request.RegisterUserRequest;
 import com.pragma.users_microservice.application.dto.request.RegisterOwnerRequest;
 import com.pragma.users_microservice.application.dto.response.ControllerResponse;
+import com.pragma.users_microservice.application.dto.response.GetClientsPhoneNumberResponse;
 import com.pragma.users_microservice.application.dto.response.GetEmployeesRestaurantResponse;
 import com.pragma.users_microservice.application.dto.response.GetUserResponse;
 import com.pragma.users_microservice.application.handler.IUserHandler;
@@ -119,5 +120,19 @@ public class UserRestControllerAdapter {
     @GetMapping("/employee/{employeeId}")
     public ResponseEntity<GetEmployeesRestaurantResponse> getEmployeesRestaurant(@PathVariable Long employeeId) {
         return ResponseEntity.status(HttpStatus.OK).body(userHandler.getEmployeesRestaurant(employeeId));
+    }
+
+    @Operation(summary = DocumentationConstants.GET_CLIENTS_PHONE_NUMBER_SUMMARY,
+            tags = {DocumentationConstants.USER_TAG},
+            description = DocumentationConstants.GET_CLIENTS_PHONE_NUMBER_DESCRIPTION
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = DocumentationConstants.OK_STATUS_CODE,
+                    description = DocumentationConstants.OK_RESPONSE_CODE_DESCRIPTION_CLIENT,
+                    content = @Content),
+    })
+    @GetMapping("/client/{clientId}")
+    public ResponseEntity<GetClientsPhoneNumberResponse> getClientsPhoneNumber(@PathVariable Long clientId) {
+        return ResponseEntity.status(HttpStatus.OK).body(userHandler.getClientsPhoneNumber(clientId));
     }
 }
