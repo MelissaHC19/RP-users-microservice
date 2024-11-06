@@ -32,4 +32,5 @@ public class SecurityConstants {
     public static final String CREATE_CLIENT_PATH = "user/create/client";
     public static final String GET_EMPLOYEES_RESTAURANT_PATH = "/user/employee/{employeeId}";
     public static final String ROLE_EMPLOYEE = "Employee";
+    public static final String GET_CLIENTS_PHONE_NUMBER_PATH = "/user/client/{clientId}";
 }

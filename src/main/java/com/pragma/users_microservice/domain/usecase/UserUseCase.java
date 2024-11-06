@@ -76,6 +76,12 @@ public class UserUseCase implements IUserServicePort {
         return employee.getRestaurantId();
     }
 
+    @Override
+    public String getClientsPhoneNumber(Long clientId) {
+        User client = userPersistencePort.getOwnerById(clientId);
+        return client.getPhoneNumber();
+    }
+
     private void validateUser(User user) {
         if (userPersistencePort.alreadyExistsByIdentityDocument(user.getIdentityDocument())) {
             throw new AlreadyExistsByIdentityDocumentException(ExceptionConstants.ALREADY_EXISTS_BY_IDENTITY_DOCUMENT_MESSAGE);

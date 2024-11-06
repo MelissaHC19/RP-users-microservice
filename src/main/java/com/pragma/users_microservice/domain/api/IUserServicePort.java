@@ -8,4 +8,5 @@ public interface IUserServicePort {
     void createEmployee(User user, Long restaurantId);
     void createClient(User user);
     Long getEmployeesRestaurant(Long employeeId);
+    String getClientsPhoneNumber(Long clientId);
 }
