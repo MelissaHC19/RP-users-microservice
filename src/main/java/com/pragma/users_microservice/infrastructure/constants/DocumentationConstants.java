@@ -27,6 +27,9 @@ public class DocumentationConstants {
     public static final String GET_CLIENTS_PHONE_NUMBER_SUMMARY = "Get client's phone number";
     public static final String GET_CLIENTS_PHONE_NUMBER_DESCRIPTION = "This endpoint returns the client's phone number in order to be able to send SMS.";
 
+    public static final String GET_USERS_EMAIL_SUMMARY = "Get user's email";
+    public static final String GET_USERS_EMAIL_DESCRIPTION = "This endpoint returns the user's email for the order traceability.";
+
     public static final String USER_TAG = "User";
 
     public static final String CREATED_STATUS_CODE = "201";
@@ -46,5 +49,6 @@ public class DocumentationConstants {
     public static final String UNAUTHORIZED_RESPONSE_CODE_DESCRIPTION_LOGIN = "User not authorized.";
     public static final String FORBIDDEN_RESPONSE_CODE_DESCRIPTION_LOGIN = "User don't have permissions.";
     public static final String OK_RESPONSE_CODE_DESCRIPTION_RESTAURANT = "The request was successful, and the restaurant's id is returned.";
-    public static final String OK_RESPONSE_CODE_DESCRIPTION_CLIENT = "The request was successfull, and the client's phone number is returned.";
+    public static final String OK_RESPONSE_CODE_DESCRIPTION_CLIENT = "The request was successful, and the client's phone number is returned.";
+    public static final String OK_RESPONSE_CODE_DESCRIPTION_USER = "The request was successful, and the user's email is returned.";
 }

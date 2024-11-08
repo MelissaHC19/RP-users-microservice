@@ -6,6 +6,7 @@ import com.pragma.users_microservice.application.dto.request.RegisterOwnerReques
 import com.pragma.users_microservice.application.dto.response.GetClientsPhoneNumberResponse;
 import com.pragma.users_microservice.application.dto.response.GetEmployeesRestaurantResponse;
 import com.pragma.users_microservice.application.dto.response.GetUserResponse;
+import com.pragma.users_microservice.application.dto.response.GetUsersEmailResponse;
 
 public interface IUserHandler {
     void createOwner(RegisterOwnerRequest registerOwnerRequest);
@@ -14,4 +15,5 @@ public interface IUserHandler {
     void createClient(RegisterUserRequest registerUserRequest);
     GetEmployeesRestaurantResponse getEmployeesRestaurant(Long employeeId);
     GetClientsPhoneNumberResponse getClientsPhoneNumber(Long clientId);
+    GetUsersEmailResponse getUsersEmail(Long userId);
 }

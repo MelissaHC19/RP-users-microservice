@@ -3,10 +3,7 @@ package com.pragma.users_microservice.infrastructure.input.rest;
 import com.pragma.users_microservice.application.dto.request.RegisterEmployeeRequest;
 import com.pragma.users_microservice.application.dto.request.RegisterUserRequest;
 import com.pragma.users_microservice.application.dto.request.RegisterOwnerRequest;
-import com.pragma.users_microservice.application.dto.response.ControllerResponse;
-import com.pragma.users_microservice.application.dto.response.GetClientsPhoneNumberResponse;
-import com.pragma.users_microservice.application.dto.response.GetEmployeesRestaurantResponse;
-import com.pragma.users_microservice.application.dto.response.GetUserResponse;
+import com.pragma.users_microservice.application.dto.response.*;
 import com.pragma.users_microservice.application.handler.IUserHandler;
 import com.pragma.users_microservice.infrastructure.constants.ControllerConstants;
 import com.pragma.users_microservice.infrastructure.constants.DocumentationConstants;
@@ -134,5 +131,19 @@ public class UserRestControllerAdapter {
     @GetMapping("/client/{clientId}")
     public ResponseEntity<GetClientsPhoneNumberResponse> getClientsPhoneNumber(@PathVariable Long clientId) {
         return ResponseEntity.status(HttpStatus.OK).body(userHandler.getClientsPhoneNumber(clientId));
+    }
+
+    @Operation(summary = DocumentationConstants.GET_USERS_EMAIL_SUMMARY,
+            tags = {DocumentationConstants.USER_TAG},
+            description = DocumentationConstants.GET_USERS_EMAIL_DESCRIPTION
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = DocumentationConstants.OK_STATUS_CODE,
+                    description = DocumentationConstants.OK_RESPONSE_CODE_DESCRIPTION_USER,
+                    content = @Content),
+    })
+    @GetMapping("/email/{userId}")
+    public ResponseEntity<GetUsersEmailResponse> getUsersEmail(@PathVariable Long userId) {
+        return ResponseEntity.status(HttpStatus.OK).body(userHandler.getUsersEmail(userId));
     }
 }
