@@ -6,6 +6,7 @@ import com.pragma.users_microservice.application.dto.request.RegisterOwnerReques
 import com.pragma.users_microservice.application.dto.response.GetClientsPhoneNumberResponse;
 import com.pragma.users_microservice.application.dto.response.GetEmployeesRestaurantResponse;
 import com.pragma.users_microservice.application.dto.response.GetUserResponse;
+import com.pragma.users_microservice.application.dto.response.GetUsersEmailResponse;
 import com.pragma.users_microservice.application.mapper.IRegisterEmployeeRequestMapper;
 import com.pragma.users_microservice.application.mapper.IRegisterUserRequestMapper;
 import com.pragma.users_microservice.application.mapper.IRegisterOwnerRequestMapper;
@@ -57,5 +58,10 @@ public class UserHandler implements IUserHandler {
     @Override
     public GetClientsPhoneNumberResponse getClientsPhoneNumber(Long clientId) {
         return new GetClientsPhoneNumberResponse(userServicePort.getClientsPhoneNumber(clientId));
+    }
+
+    @Override
+    public GetUsersEmailResponse getUsersEmail(Long userId) {
+        return new GetUsersEmailResponse(userServicePort.getUsersEmail(userId));
     }
 }

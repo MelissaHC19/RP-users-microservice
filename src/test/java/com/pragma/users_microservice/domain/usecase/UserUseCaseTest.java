@@ -314,4 +314,19 @@ class UserUseCaseTest {
         assertEquals(phoneNumber, result);
         Mockito.verify(userPersistencePort, Mockito.times(1)).getOwnerById(clientId);
     }
+
+    @Test
+    @DisplayName("Returns user's email successfully")
+    void getUsersEmail() {
+        Long userId = 1L;
+        String email = "email@email.com";
+        User user = new User(1L, null, null, null, null,
+                null, "email@email.com", null, null);
+        Mockito.when(userPersistencePort.getOwnerById(userId)).thenReturn(user);
+
+        String result = userUseCase.getUsersEmail(userId);
+
+        assertEquals(email, result);
+        Mockito.verify(userPersistencePort, Mockito.times(1)).getOwnerById(userId);
+    }
 }
